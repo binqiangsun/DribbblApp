@@ -53,7 +53,7 @@ public class FrescoManager {
      * @param diskCacheUniqueName
      */
     public void initFresco(Context context, String diskCacheUniqueName){
-        DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder(context)
+        DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder()
                 .setMaxCacheSize(DISK_CACHE_SIZE_HIGH)
                 .setMaxCacheSizeOnLowDiskSpace(DISK_CACHE_SIZE_LOW)
                 .setMaxCacheSizeOnVeryLowDiskSpace(DISK_CACHE_SIZE_VERY_LOW)

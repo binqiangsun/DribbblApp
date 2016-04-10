@@ -16,12 +16,14 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{clickHandlers.onClick}"
         >
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/image_drawee_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{clickHandlers.onClick}"
             app:viewAspectRatio="1.33"/>
 
 
