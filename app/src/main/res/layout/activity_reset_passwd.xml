@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/toolbar"/>
+
+        <!-- Login progress -->
+        <ProgressBar
+            android:id="@+id/passwd_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            android:layout_margin="16dp"/>
+
+            <ScrollView
+                android:id="@+id/passwd_form"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:id="@+id/email_login_form"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/passwd_phone_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="手机号"
+                            android:inputType="textPhonetic"
+                            android:maxLines="1"
+                            android:textSize="13sp"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/passwd_code_tv"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="验证码"
+                                android:inputType="textPhonetic"
+                                android:maxLines="1"
+                                android:textSize="13sp"
+                                android:singleLine="true" />
+
+
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="获取验证码"
+                            />
+
+                    </LinearLayout>
+
+
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/passwd_password_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="新密码"
+                            android:textSize="13sp"
+                            android:imeActionId="@+id/login"
+                            android:imeActionLabel="注册"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/passwd_paswd_ensure_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="确认密码"
+                            android:textSize="13sp"
+                            android:imeActionId="@+id/login"
+                            android:imeActionLabel="注册"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/email_sign_in_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="确认"
+                        android:background="@color/colorPrimary"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </ScrollView>
+    </LinearLayout>
+</layout>

@@ -1,5 +1,6 @@
 package com.dribbb.sun.dribbblapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -16,16 +17,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.dribbb.sun.dribbblapp.activity.LoginActivity;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
+import com.dribbb.sun.dribbblapp.databinding.ActivityHomeBinding;
 import com.dribbb.sun.dribbblapp.fragment.HomeFollowedFragment;
 import com.dribbb.sun.dribbblapp.fragment.HomeSelectedFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends BaseActivity
+public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         implements NavigationView.OnNavigationItemSelectedListener {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,7 @@ public class HomeActivity extends BaseActivity
     }
 
     @Override
-    protected void setViews() {
+    protected void initViews() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -54,8 +56,16 @@ public class HomeActivity extends BaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "增加操作...", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
+            }
+        });
+        //登录
+        navigationView.getHeaderView(0).findViewById(R.id.author_iv).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -109,6 +119,8 @@ public class HomeActivity extends BaseActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
+
+        } else if (id == R.id.author_iv) {
 
         }
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="comment"
+            type="com.dribbb.sun.model.Comment"/>
+
+        <variable
+            name="clickHandlers"
+            type="android.view.View.OnClickListener"/>
+
+        <import type="android.text.Html"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/author_drawee_view"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:backgroundImage="@color/gray_image_background"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:textColor="#3d2a1b"
+                android:textSize="13sp"
+                android:maxLines="1"
+                android:text="@{Html.fromHtml(comment.body)}"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

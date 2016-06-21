@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <data>
         <variable
@@ -13,24 +15,11 @@
 
     </data>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardView"
+    <LinearLayout android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="@{clickHandlers.onClick}"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/image_drawee_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="@{clickHandlers.onClick}"
-                app:viewAspectRatio="1.33"/>
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,22 +32,19 @@
 
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/author_drawee_view"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    app:backgroundImage="@color/gray_image_background"
-                    android:onClick="@{clickHandlers.onClick}"/>
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:backgroundImage="@color/gray_image_background"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="16dp"
                     android:textColor="#3d2a1b"
                     android:textSize="13sp"
                     android:maxLines="1"
                     android:text="@{shot.user.name}"/>
-
-
 
             </LinearLayout>
 
@@ -66,12 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="bottom">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"/>
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="64dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -95,17 +77,12 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/shot_text_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
 
-
-        </LinearLayout>
-
-
-
-
-
-    </android.support.v7.widget.CardView>
-
-
-
+    </LinearLayout>
 
 </layout>

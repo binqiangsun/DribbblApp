@@ -3,15 +3,14 @@ package com.dribbb.sun.dribbblapp.viewholder;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.dribbb.sun.dribbblapp.R;
+import com.dribbb.sun.dribbblapp.activity.ShotInfoNativeActivity;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.databinding.SelectedRecyclerViewBinding;
 import com.dribbb.sun.dribbblapp.instance.FrescoManager;
-import com.dribbb.sun.dribbblapp.react.ShotInfoActivity;
 import com.dribbb.sun.model.Shot;
 
 /**
@@ -33,8 +32,9 @@ public class SelectedViewHolder extends BaseViewHolder implements View.OnClickLi
         mShot = shot;
         binding.setShot(shot);
         binding.setClickHandlers(this);
-        Log.i("image path", shot.getImages().getTeaser());
-        FrescoManager.getInstance().setImageSrc(binding.imageDraweeView, shot.getImages().getTeaser(), 0, 0);
+        FrescoManager.getInstance().setImageSrc(binding.imageDraweeView, shot.getImages().getNormal(), 0, 0);
+        FrescoManager.getInstance().setCircleImageSrc(binding.authorDraweeView, shot.getUser().getAvatar_url(), 0, 0, R.color.gray_image_background);
+        binding.executePendingBindings();
     }
 
 
@@ -44,9 +44,9 @@ public class SelectedViewHolder extends BaseViewHolder implements View.OnClickLi
     }
 
     private void startInfo(){
-        Intent intent = new Intent(mContext, ShotInfoActivity.class);
-        intent.putExtra("shotImg", mShot.getImages().getHidpi());
-        intent.putExtra("shotText", mShot.getTitle());
+        Intent intent = new Intent(mContext, ShotInfoNativeActivity.class);
+        intent.putExtra("shot", mShot);
+        intent.putExtra("shotId", String.valueOf(mShot.getId()));
         mContext.startActivity(intent);
     }
 }

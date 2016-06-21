@@ -50,3 +50,6 @@ Thumbs.db
 *.index
 *.hprof
 *.zip
+node_modules/
+*workspace
+*project

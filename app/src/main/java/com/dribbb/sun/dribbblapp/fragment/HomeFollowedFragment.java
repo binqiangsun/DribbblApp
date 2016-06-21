@@ -1,5 +1,6 @@
 package com.dribbb.sun.dribbblapp.fragment;
 
+import android.graphics.Rect;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,12 +20,20 @@ public class HomeFollowedFragment extends BaseFragment {
     protected int getLayoutId() {
         return R.layout.swipe_recycle_layout;
     }
-
     @Override
     protected void setViews(View view) {
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.set(4, 4, 4,
+                        4);
+            }
+        });
+
         final SelectedAdapter adapter = new SelectedAdapter(getContext());
         adapter.setSwipeRefreshLayout(swipeRefreshLayout);
         recyclerView.setAdapter(adapter);

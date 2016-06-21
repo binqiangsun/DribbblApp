@@ -4,14 +4,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ViewGroup;
 
-import com.dribbb.sun.service.api.ApiService;
-import com.dribbb.sun.service.http.ApiRequestHandler;
-import com.dribbb.sun.service.http.HttpService;
 import com.dribbb.sun.dribbblapp.base.BaseRecyclerViewAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.utils.TypeUtils;
+import com.dribbb.sun.service.api.ApiService;
+import com.dribbb.sun.service.http.ApiRequestHandler;
+import com.dribbb.sun.service.http.HttpService;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -46,6 +47,14 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d("list_viewtype", String.valueOf(viewType));
+
+        if(isHeaderViewType(viewType)){
+            RecyclerView.ViewHolder holder = createHeaderViewHolder(parent, getPositionForHeaderViewType(viewType));
+            holder.setIsRecyclable(false);
+            return holder;
+        }
+
         switch (viewType){
             case TypeUtils.EMPTY_ID:
             case TypeUtils.ERROR_ID:
@@ -59,6 +68,10 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (isPositionInHeaderRange(position)) {
+            onBindHeaderViewHolder(holder, position);
+            return;
+        }
         switch (getItemViewType(position)){
             case TypeUtils.LOADING_ID:
                 loadNext();
@@ -67,7 +80,8 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
                 break;
             case TypeUtils.ERROR_ID:
                 break;
-            case TypeUtils.ITEM_ID:
+            default:
+                position -= getHeadViewCount();
                 onBindItemView(holder, position);
                 break;
         }
@@ -78,12 +92,24 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
         int count = 0;
         if(isEmpty()) count++;
         if((!isEnd()) || isError()) count++;
+        count += getHeadViewCount();
         count += getList().size();
+        Log.d("list_isend", String.valueOf(isEnd()));
+        Log.d("list_isEmpty", String.valueOf(isEmpty()));
+        Log.d("list_count", String.valueOf(count));
         return count;
     }
 
     @Override
     public int getItemViewType(int position){
+        if (hasHeaderViewHolder() && isPositionInHeaderRange(position)) {
+            return getViewTypeForHeader(position);
+        }
+
+        if (hasHeaderViewHolder()) {
+            position -= getHeadViewCount();
+        }
+        
         if(position < list.size()){
             return TypeUtils.ITEM_ID;
         } else if(isEmpty()){
@@ -209,5 +235,46 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
 
     public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
         this.swipeRefreshLayout = swipeRefreshLayout;
+    }
+    
+    //add head view
+    protected boolean hasHeaderViewHolder(){
+        return getHeadViewCount() > 0;
+    }
+    
+    protected int getHeadViewCount(){
+        return 0;
+    }
+
+    protected BaseViewHolder onCreateHeaderViewHolder(ViewGroup parent, int position) {
+        return null;
+    }
+
+    protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+    }
+
+    private int getPositionForHeaderViewType(int viewType) {
+        return viewType & ~TypeUtils.HEADER_FOOTER_TYPE_MASK;
+    }
+
+    private boolean isHeaderViewType(int viewType) {
+        return hasHeaderViewHolder() && ((viewType & TypeUtils.HEADER_FOOTER_TYPE_MASK) == TypeUtils.HEADER_TYPE);
+    }
+
+    private int getViewTypeForHeader(int position) {
+        return TypeUtils.HEADER_TYPE | position;
+    }
+
+    private boolean isPositionInHeaderRange(int position) {
+        return getHeadViewCount() > position;
+    }
+
+    private BaseViewHolder createHeaderViewHolder(ViewGroup parent, int position) {
+        BaseViewHolder viewHolder = onCreateHeaderViewHolder(parent, position);
+        if (viewHolder == null) {
+            throw new RuntimeException("postion = " + position + ":HeaderViewHolder can't be null");
+        }
+        return viewHolder;
     }
 }

@@ -1,11 +1,15 @@
 package com.dribbb.sun.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.text.TextUtils;
+
 import java.util.List;
 
 /**
  * Created by sunbinqiang on 16/2/2.
  */
-public class Shot {
+public class Shot implements Parcelable {
 
     /**
      * id : 2485306
@@ -100,6 +104,51 @@ public class Shot {
     private Object team;
     private List<String> tags;
 
+
+    private static final SingleClassLoader IMAGEENTITY_CL = new SingleClassLoader(
+            ImageEntity.class);
+    private static final SingleClassLoader USER_CL = new SingleClassLoader(
+            User.class);
+
+    protected Shot(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        description = in.readString();
+        width = in.readInt();
+        height = in.readInt();
+        views_count = in.readInt();
+        likes_count = in.readInt();
+        comments_count = in.readInt();
+        attachments_count = in.readInt();
+        rebounds_count = in.readInt();
+        buckets_count = in.readInt();
+        created_at = in.readString();
+        updated_at = in.readString();
+        html_url = in.readString();
+        attachments_url = in.readString();
+        buckets_url = in.readString();
+        comments_url = in.readString();
+        likes_url = in.readString();
+        projects_url = in.readString();
+        rebounds_url = in.readString();
+        animated = in.readByte() != 0;
+        tags = in.createStringArrayList();
+        images = in.readParcelable(IMAGEENTITY_CL);
+        user = in.readParcelable(USER_CL);
+    }
+
+    public static final Creator<Shot> CREATOR = new Creator<Shot>() {
+        @Override
+        public Shot createFromParcel(Parcel in) {
+            return new Shot(in);
+        }
+
+        @Override
+        public Shot[] newArray(int size) {
+            return new Shot[size];
+        }
+    };
+
     public int getId() {
         return id;
     }
@@ -122,6 +171,13 @@ public class Shot {
 
     public ImageEntity getImages() {
         return images;
+    }
+
+    public String getHdipImage(){
+        if(images != null){
+            return TextUtils.isEmpty(images.getHidpi()) ? images.getNormal() : images.getHidpi();
+        }
+        return "";
     }
 
     public int getViews_count() {
@@ -198,5 +254,38 @@ public class Shot {
 
     public List<String> getTags() {
         return tags;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeInt(width);
+        dest.writeInt(height);
+        dest.writeInt(views_count);
+        dest.writeInt(likes_count);
+        dest.writeInt(comments_count);
+        dest.writeInt(attachments_count);
+        dest.writeInt(rebounds_count);
+        dest.writeInt(buckets_count);
+        dest.writeString(created_at);
+        dest.writeString(updated_at);
+        dest.writeString(html_url);
+        dest.writeString(attachments_url);
+        dest.writeString(buckets_url);
+        dest.writeString(comments_url);
+        dest.writeString(likes_url);
+        dest.writeString(projects_url);
+        dest.writeString(rebounds_url);
+        dest.writeByte((byte) (animated ? 1 : 0));
+        dest.writeStringList(tags);
+        dest.writeParcelable(images, flags);
+        dest.writeParcelable(user, flags);
     }
 }
