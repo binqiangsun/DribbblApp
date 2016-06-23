@@ -12,12 +12,14 @@
 
     <android.support.design.widget.TabLayout
         android:id="@+id/home_tabs"
-        app:tabTextColor="@android:color/black"
-        app:tabSelectedTextColor="@android:color/holo_blue_bright"
-        app:tabIndicatorColor="@android:color/holo_blue_bright"
+        app:tabTextColor="@color/tabText"
+        app:tabSelectedTextColor="@color/white"
+        app:tabIndicatorColor="@color/tabIndicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         app:tabMode="fixed"
+
         />
 
     <android.support.v4.view.ViewPager

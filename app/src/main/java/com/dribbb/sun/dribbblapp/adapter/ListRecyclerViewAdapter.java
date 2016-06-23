@@ -1,5 +1,6 @@
 package com.dribbb.sun.dribbblapp.adapter;
 
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -38,11 +39,11 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
     private List<T> list = new ArrayList<>();
     private Request request;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private int mPage = 0;
+    private int mPage = 1;
 
     public ListRecyclerViewAdapter() {
         super();
-        mPage = 0;
+        mPage = 1;
     }
 
     @Override
@@ -94,9 +95,6 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
         if((!isEnd()) || isError()) count++;
         count += getHeadViewCount();
         count += getList().size();
-        Log.d("list_isend", String.valueOf(isEnd()));
-        Log.d("list_isEmpty", String.valueOf(isEmpty()));
-        Log.d("list_count", String.valueOf(count));
         return count;
     }
 
@@ -128,7 +126,9 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
             return false;
         }
 
-        request = new Request.Builder().url(getRequestUrl())
+        String url = Uri.parse(getRequestUrl()).buildUpon()
+                .appendQueryParameter("page", String.valueOf(mPage)).build().toString();
+        request = new Request.Builder().url(url)
                 .method(ApiService.GET_METHOD, null).build();
 
         HttpService.exec(request, new ApiRequestHandler() {
@@ -144,6 +144,9 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
                 }
                 if(data != null) {
                     T[] resultList = getResult(gson, data);
+                    if (resultList.length == 0){
+                        mIsEnd = true;
+                    }
                     setResultList(resultList);
                 }
                 onRequestFinished();

@@ -56,7 +56,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "增加操作...", Snackbar.LENGTH_SHORT)
+                Snackbar.make(view, "add shot...", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
             }
         });
@@ -140,8 +140,8 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         homePageAdapter.setFragments(fragmentList);
 
         List<String> titles = new ArrayList<>();
-        titles.add("精选");
-        titles.add("关注");
+        titles.add("POPULAR");
+        titles.add("RECENT");
         homePageAdapter.setTitles(titles);
 
         viewPager.setAdapter(homePageAdapter);

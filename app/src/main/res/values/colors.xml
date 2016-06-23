@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#66cc99</color>
-    <color name="colorPrimaryBg">#00b6e3</color>
-    <color name="colorPrimaryDark">#00b6e3</color>
-    <color name="colorAccent">#00b6e3</color>
+    <color name="colorPrimary">#292C33</color>
+    <color name="colorPrimaryBg">#FFFFFF</color>
+    <color name="colorPrimaryDark">#14151A</color>
+    <color name="colorAccent">#555456</color>
+    <color name="tabIndicator">#C1AF8A</color>
+    <color name="tabText">#7F8085</color>
     <color name="gray_image_background">#F7F6F1</color>
     <color name="white">#ffffff</color>
     <color name="foot_text_color">#aaaaaa</color>
