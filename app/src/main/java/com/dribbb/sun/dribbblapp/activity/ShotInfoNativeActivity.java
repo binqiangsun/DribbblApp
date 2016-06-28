@@ -35,7 +35,7 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
     protected void initViews() {
         mShot = getIntent().getParcelableExtra("shot");
         mBinding.shotImg.setImageURI(Uri.parse(mShot.getHdipImage()));
-        mBinding.collapsingToolbarLayout.setTitle(mShot.getTitle());
+        //mBinding.collapsingToolbarLayout.setTitle(mShot.getTitle());
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mBinding.recyclerView.setAdapter(new ShotInfoAdapter());
     }

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.viewholder.SelectedViewHolder;
 import com.dribbb.sun.model.Shot;
-import com.dribbb.sun.service.api.ApiService;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -18,13 +17,15 @@ import org.json.JSONArray;
 public class SelectedAdapter extends ListRecyclerViewAdapter<Shot>{
 
     private Context mContext;
-    public SelectedAdapter(Context context){
+    private String  mRequestUrl;
+    public SelectedAdapter(Context context, String requestUrl){
         mContext = context;
+        mRequestUrl = requestUrl;
     }
 
     @Override
     protected String getRequestUrl() {
-        return ApiService.SELECTING_SHOTS_URL;
+        return mRequestUrl;
     }
 
     @Override

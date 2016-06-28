@@ -17,11 +17,21 @@ import com.dribbb.sun.dribbblapp.base.BaseFragment;
  * Created by sunbinqiang on 16/2/27.
  * 首页精选
  */
-public class HomeSelectedFragment extends BaseFragment {
+public class SelectedFragment extends BaseFragment {
+
+    //实例化, 传递参数
+    public static SelectedFragment newInstance(String requestUrl){
+        SelectedFragment selectedFragment = new SelectedFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("request_url", requestUrl);
+        selectedFragment.setArguments(bundle);
+        return selectedFragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -44,7 +54,7 @@ public class HomeSelectedFragment extends BaseFragment {
                         4);
             }
         });
-        final SelectedAdapter adapter = new SelectedAdapter(getContext());
+        final SelectedAdapter adapter = new SelectedAdapter(getContext(), getArguments().getString("request_url"));
         adapter.setSwipeRefreshLayout(swipeRefreshLayout);
         recyclerView.setAdapter(adapter);
 

@@ -20,8 +20,8 @@ import android.view.View;
 import com.dribbb.sun.dribbblapp.activity.LoginActivity;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.databinding.ActivityHomeBinding;
-import com.dribbb.sun.dribbblapp.fragment.HomeFollowedFragment;
-import com.dribbb.sun.dribbblapp.fragment.HomeSelectedFragment;
+import com.dribbb.sun.dribbblapp.fragment.SelectedFragment;
+import com.dribbb.sun.service.api.ApiService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,8 +135,9 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         HomePageAdapter  homePageAdapter = new HomePageAdapter(getSupportFragmentManager());
 
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new HomeSelectedFragment());
-        fragmentList.add(new HomeFollowedFragment());
+
+        fragmentList.add(SelectedFragment.newInstance(ApiService.POPULAR_SHOTS_URL));
+        fragmentList.add(SelectedFragment.newInstance(ApiService.RECENT_SHOTS_URL));
         homePageAdapter.setFragments(fragmentList);
 
         List<String> titles = new ArrayList<>();
