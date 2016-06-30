@@ -180,6 +180,13 @@ public class Shot implements Parcelable {
         return "";
     }
 
+    public String getLdipImage(){
+        if(images != null){
+            return TextUtils.isEmpty(images.getTeaser()) ? images.getNormal() : images.getTeaser();
+        }
+        return "";
+    }
+
     public int getViews_count() {
         return views_count;
     }

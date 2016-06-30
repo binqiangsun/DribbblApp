@@ -18,6 +18,7 @@ import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.generic.RoundingParams;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.core.ImagePipeline;
@@ -114,6 +115,17 @@ public class FrescoManager {
         draweeView.setHierarchy(hierarchy);
 
         setImageSrc(draweeView, src, width, height);
+    }
+
+    public void setLowImageSrc(SimpleDraweeView draweeView, String lowSrc, String highSrc){
+        Uri lowUri = Uri.parse(lowSrc);
+        Uri highUri = Uri.parse(highSrc);
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setLowResImageRequest(ImageRequest.fromUri(lowUri))
+                .setImageRequest(ImageRequest.fromUri(highUri))
+                .setOldController(draweeView.getController())
+                .build();
+        draweeView.setController(controller);
     }
 
     /**

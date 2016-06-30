@@ -16,6 +16,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ViewFlipper;
 
 import com.dribbb.sun.dribbblapp.activity.LoginActivity;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
@@ -28,6 +30,10 @@ import java.util.List;
 
 public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final int gallery_image_res[] =
+            {R.drawable.ic_wall_1, R.drawable.ic_wall_2, R.drawable.ic_wall_3, R.drawable.ic_wall_4};
+    private ViewFlipper viewFlipper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,8 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        viewFlipper = (ViewFlipper) navigationView.getHeaderView(0).findViewById(R.id.header_view_flipper) ;
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.home_tabs);
         ViewPager viewPager = (ViewPager) findViewById(R.id.home_viewPager);
@@ -68,6 +76,10 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
                 startActivity(intent);
             }
         });
+        //登录背景动画
+        for(int i = 0; i < gallery_image_res.length; i ++){
+            addResourceToFlipper(gallery_image_res[i]);
+        }
     }
 
     @Override
@@ -108,9 +120,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -138,15 +148,26 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
 
         fragmentList.add(SelectedFragment.newInstance(ApiService.POPULAR_SHOTS_URL));
         fragmentList.add(SelectedFragment.newInstance(ApiService.RECENT_SHOTS_URL));
+        fragmentList.add(SelectedFragment.newInstance(ApiService.DEBUT_SHOTS_URL));
+        fragmentList.add(SelectedFragment.newInstance(ApiService.ANIMATED_SHOTS_URL));
         homePageAdapter.setFragments(fragmentList);
 
         List<String> titles = new ArrayList<>();
         titles.add("POPULAR");
         titles.add("RECENT");
+        titles.add("DEBUTS");
+        titles.add("ANIMATED");
         homePageAdapter.setTitles(titles);
 
         viewPager.setAdapter(homePageAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setOffscreenPageLimit(fragmentList.size());
+    }
+
+    private void addResourceToFlipper(int res){
+        ImageView image = new ImageView(getApplicationContext());
+        image.setBackgroundResource(res);
+        viewFlipper.addView(image);
     }
 
     private class HomePageAdapter extends FragmentPagerAdapter{

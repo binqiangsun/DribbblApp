@@ -37,7 +37,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:layout_marginLeft="16dp"
-                android:textColor="#3d2a1b"
+                android:textColor="@color/white"
                 android:textSize="13sp"
                 android:maxLines="1"
                 android:text="@{Html.fromHtml(comment.body)}"/>

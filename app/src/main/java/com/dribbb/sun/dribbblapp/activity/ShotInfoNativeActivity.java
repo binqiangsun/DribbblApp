@@ -10,6 +10,7 @@ import com.dribbb.sun.dribbblapp.adapter.ListRecyclerViewAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.databinding.ActivityShotNativeLayoutBinding;
+import com.dribbb.sun.dribbblapp.instance.FrescoManager;
 import com.dribbb.sun.dribbblapp.viewholder.CommentViewholder;
 import com.dribbb.sun.dribbblapp.viewholder.ShotInfoHeaderViewHolder;
 import com.dribbb.sun.model.Comment;
@@ -35,7 +36,8 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
     protected void initViews() {
         mShot = getIntent().getParcelableExtra("shot");
         mBinding.shotImg.setImageURI(Uri.parse(mShot.getHdipImage()));
-        //mBinding.collapsingToolbarLayout.setTitle(mShot.getTitle());
+        FrescoManager.getInstance().setLowImageSrc(mBinding.shotImg, mShot.getLdipImage(), mShot.getHdipImage());
+        mBinding.collapsingToolbarLayout.setTitle(mShot.getTitle());
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mBinding.recyclerView.setAdapter(new ShotInfoAdapter());
     }
