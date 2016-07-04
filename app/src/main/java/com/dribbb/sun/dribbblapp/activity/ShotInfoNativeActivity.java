@@ -36,8 +36,8 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
     protected void initViews() {
         mShot = getIntent().getParcelableExtra("shot");
         mBinding.shotImg.setImageURI(Uri.parse(mShot.getHdipImage()));
-        FrescoManager.getInstance().setLowImageSrc(mBinding.shotImg, mShot.getLdipImage(), mShot.getHdipImage());
-        mBinding.collapsingToolbarLayout.setTitle(mShot.getTitle());
+        FrescoManager.getInstance().setLowImageSrc(mBinding.shotImg, mShot.getImages().getNormal(), mShot.getHdipImage());
+        mBinding.collapsingToolbarLayout.setTitle("");
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mBinding.recyclerView.setAdapter(new ShotInfoAdapter());
     }

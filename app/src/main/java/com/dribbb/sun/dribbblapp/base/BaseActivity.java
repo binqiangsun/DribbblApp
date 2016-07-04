@@ -27,7 +27,9 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, getLayoutId());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        if(toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
         initViews();
         setViewListener();
     }
