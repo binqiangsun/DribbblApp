@@ -117,6 +117,12 @@ public class FrescoManager {
         setImageSrc(draweeView, src, width, height);
     }
 
+    /**
+     * 预先展示低分辨率, 再展示高分辨率
+     * @param draweeView
+     * @param lowSrc
+     * @param highSrc
+     */
     public void setLowImageSrc(SimpleDraweeView draweeView, String lowSrc, String highSrc){
         Uri lowUri = Uri.parse(lowSrc);
         Uri highUri = Uri.parse(highSrc);
@@ -124,6 +130,15 @@ public class FrescoManager {
                 .setLowResImageRequest(ImageRequest.fromUri(lowUri))
                 .setImageRequest(ImageRequest.fromUri(highUri))
                 .setOldController(draweeView.getController())
+                .build();
+        draweeView.setController(controller);
+    }
+
+    public void setGifSrc(SimpleDraweeView draweeView, String gifSrc){
+        Uri gifUri = Uri.parse(gifSrc);
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setUri(gifUri)
+                .setAutoPlayAnimations(true)
                 .build();
         draweeView.setController(controller);
     }

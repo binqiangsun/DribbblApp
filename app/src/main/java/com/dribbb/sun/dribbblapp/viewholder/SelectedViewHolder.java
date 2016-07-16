@@ -32,7 +32,11 @@ public class SelectedViewHolder extends BaseViewHolder implements View.OnClickLi
         mShot = shot;
         binding.setShot(shot);
         binding.setClickHandlers(this);
-        FrescoManager.getInstance().setImageSrc(binding.imageDraweeView, shot.getImages().getNormal(), 0, 0);
+        if(shot.isAnimated()){
+            FrescoManager.getInstance().setGifSrc(binding.imageDraweeView, shot.getImages().getNormal());
+        }else{
+            FrescoManager.getInstance().setImageSrc(binding.imageDraweeView, shot.getImages().getNormal(), 0, 0);
+        }
         FrescoManager.getInstance().setCircleImageSrc(binding.authorDraweeView, shot.getUser().getAvatar_url(), 0, 0, R.color.gray_image_background);
         binding.executePendingBindings();
     }
