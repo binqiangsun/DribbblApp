@@ -25,12 +25,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <com.dribbb.sun.dribbblapp.view.NetworkImageView
                 android:id="@+id/image_drawee_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:onClick="@{clickHandlers.onClick}"
-                app:viewAspectRatio="1.33"/>
+                app:imageUrl="@{shot.normImage}"
+                app:roundRadius="10"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,12 +43,13 @@
                 android:paddingTop="8dp">
 
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <com.dribbb.sun.dribbblapp.view.NetworkImageView
                     android:id="@+id/author_drawee_view"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:backgroundImage="@color/gray_image_background"
-                    android:onClick="@{clickHandlers.onClick}"/>
+                    android:onClick="@{clickHandlers.onClick}"
+                    app:imageUrl="@{shot.user.avatar_url}"
+                    app:roundRadius="10"/>
 
                 <TextView
                     android:layout_width="wrap_content"

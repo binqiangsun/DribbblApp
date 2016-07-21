@@ -10,7 +10,6 @@ import com.dribbb.sun.dribbblapp.R;
 import com.dribbb.sun.dribbblapp.activity.ShotInfoNativeActivity;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.databinding.SelectedRecyclerViewBinding;
-import com.dribbb.sun.dribbblapp.instance.FrescoManager;
 import com.dribbb.sun.model.Shot;
 
 /**
@@ -32,12 +31,6 @@ public class SelectedViewHolder extends BaseViewHolder implements View.OnClickLi
         mShot = shot;
         binding.setShot(shot);
         binding.setClickHandlers(this);
-        if(shot.isAnimated()){
-            FrescoManager.getInstance().setGifSrc(binding.imageDraweeView, shot.getImages().getNormal());
-        }else{
-            FrescoManager.getInstance().setImageSrc(binding.imageDraweeView, shot.getImages().getNormal(), 0, 0);
-        }
-        FrescoManager.getInstance().setCircleImageSrc(binding.authorDraweeView, shot.getUser().getAvatar_url(), 0, 0, R.color.gray_image_background);
         binding.executePendingBindings();
     }
 

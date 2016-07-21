@@ -29,6 +29,9 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.io.File;
 
+import static android.R.attr.radius;
+import static android.R.attr.width;
+
 /**
  * Created by sunbinqiang on 16/3/2.
  */
@@ -54,7 +57,7 @@ public class FrescoManager {
      * @param diskCacheUniqueName
      */
     public void initFresco(Context context, String diskCacheUniqueName){
-        DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder()
+        DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder(context)
                 .setMaxCacheSize(DISK_CACHE_SIZE_HIGH)
                 .setMaxCacheSizeOnLowDiskSpace(DISK_CACHE_SIZE_LOW)
                 .setMaxCacheSizeOnVeryLowDiskSpace(DISK_CACHE_SIZE_VERY_LOW)
@@ -151,17 +154,13 @@ public class FrescoManager {
      * @param height
      * @param failedResId
      */
-    public void setRoundImageSrc(SimpleDraweeView draweeView, String src, int width, int height, float radius, int failedResId){
+    public void setRoundImageSrc(SimpleDraweeView draweeView, String src, float radius){
         RoundingParams roundingParams = RoundingParams.fromCornersRadius(radius);
-        GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(draweeView.getResources());
-        builder = builder.setRoundingParams(roundingParams);
-        if(failedResId > 0) {
-            builder = builder.setFailureImage(draweeView.getResources().getDrawable(failedResId));  //失败后默认图片
-        }
-        GenericDraweeHierarchy hierarchy = builder.build();
-        draweeView.setHierarchy(hierarchy);
-
-        setImageSrc(draweeView, src, width, height);
+        draweeView.setHierarchy(
+                new GenericDraweeHierarchyBuilder(draweeView.getResources())
+                .setRoundingParams(roundingParams)
+                .build());
+        draweeView.setImageURI(Uri.parse(src));
     }
 
 

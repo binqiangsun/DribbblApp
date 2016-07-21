@@ -1,6 +1,5 @@
 package com.dribbb.sun.dribbblapp.activity;
 
-import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import com.dribbb.sun.dribbblapp.adapter.ListRecyclerViewAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.databinding.ActivityShotNativeLayoutBinding;
-import com.dribbb.sun.dribbblapp.instance.FrescoManager;
 import com.dribbb.sun.dribbblapp.viewholder.CommentViewholder;
 import com.dribbb.sun.dribbblapp.viewholder.ShotInfoHeaderViewHolder;
 import com.dribbb.sun.model.Comment;
@@ -35,11 +33,12 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
     @Override
     protected void initViews() {
         mShot = getIntent().getParcelableExtra("shot");
-        mBinding.shotImg.setImageURI(Uri.parse(mShot.getHdipImage()));
-        FrescoManager.getInstance().setLowImageSrc(mBinding.shotImg, mShot.getImages().getNormal(), mShot.getHdipImage());
+        mBinding.setShot(mShot);
+        mBinding.shotImg.setImageUrl(mShot.getHdipImage());
         mBinding.collapsingToolbarLayout.setTitle("");
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mBinding.recyclerView.setAdapter(new ShotInfoAdapter());
+        mBinding.executePendingBindings();
     }
 
 

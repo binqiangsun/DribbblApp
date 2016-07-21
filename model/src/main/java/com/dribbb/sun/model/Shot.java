@@ -187,6 +187,13 @@ public class Shot implements Parcelable {
         return "";
     }
 
+    public String getNormImage(){
+        if(images != null){
+            return images.getNormal();
+        }
+        return "";
+    }
+
     public int getViews_count() {
         return views_count;
     }
