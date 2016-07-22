@@ -1,22 +1,16 @@
 package com.dribbb.sun.dribbblapp.view;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
 import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.dribbb.sun.dribbblapp.R;
+import com.dribbb.sun.dribbblapp.instance.GlideInstance;
+import com.dribbb.sun.dribbblapp.utils.VariableUtils;
 
 /**
  * Created by sunbinqiang on 7/20/16.
@@ -25,8 +19,9 @@ import com.dribbb.sun.dribbblapp.R;
 public class NetworkImageView extends ImageView {
 
     private Context mContext;
-    boolean isGifEnable;
+    private boolean isGifEnable;
     private int roundRadius ;
+    private boolean isCircle;
 
     public NetworkImageView(Context context) {
         this(context, null);
@@ -44,63 +39,38 @@ public class NetworkImageView extends ImageView {
         String imageUrl = a.getString(R.styleable.NetworkImageView_imageUrl);
         isGifEnable = a.getBoolean(R.styleable.NetworkImageView_isGifEnable, false);
         roundRadius = a.getInteger(R.styleable.NetworkImageView_roundRadius, 0);
+        isCircle = a.getBoolean(R.styleable.NetworkImageView_isCircle, false);
     }
 
-    public void setGifEnable(boolean gifEnable) {
-        isGifEnable = gifEnable;
+    public void setImageUrl(String imageUrl) {
+        switch (VariableUtils.IMAGE_TYPE){
+            case TYPEGLIDE:
+                setGlideImageUrl(imageUrl);
+                break;
+            case TYPEFRESCO:
+                break;
+        }
     }
 
-    public void setImageUrl(String imageUrl){
+    public void setGlideImageUrl(String imageUrl){
         if(TextUtils.isEmpty(imageUrl)) return;
         DrawableTypeRequest glideRequest = Glide.with(mContext).load(imageUrl);
         if(!isGifEnable && imageUrl.endsWith("gif")) {
             glideRequest.asBitmap();
         }
         if(roundRadius > 0) {
-            glideRequest.transform(new GlideRoundTransform(mContext, roundRadius));
+            glideRequest.transform(new GlideInstance.GlideRoundTransform(mContext, roundRadius));
+        }else if(isCircle){
+            glideRequest.transform(new GlideInstance.CircleTransform(mContext));
+        }else{
+            glideRequest.centerCrop();
         }
-        glideRequest.centerCrop().into(this);
+        glideRequest.into(this);
     }
 
-    private class GlideRoundTransform extends BitmapTransformation {
+    private void setFrescoImageUrl(String imageUrl){
+        if(TextUtils.isEmpty(imageUrl)) return;
 
-        private float radius = 0f;
-
-        public GlideRoundTransform(Context context) {
-            this(context, 4);
-        }
-
-        public GlideRoundTransform(Context context, int dp) {
-            super(context);
-            this.radius = Resources.getSystem().getDisplayMetrics().density * dp;
-        }
-
-        @Override
-        protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-            return roundCrop(pool, toTransform);
-        }
-
-        private Bitmap roundCrop(BitmapPool pool, Bitmap source) {
-            if (source == null) return null;
-
-            Bitmap result = pool.get(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
-            if (result == null) {
-                result = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
-            }
-
-            Canvas canvas = new Canvas(result);
-            Paint paint = new Paint();
-            paint.setShader(new BitmapShader(source, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
-            paint.setAntiAlias(true);
-            RectF rectF = new RectF(0f, 0f, source.getWidth(), source.getHeight());
-            canvas.drawRoundRect(rectF, radius, radius, paint);
-            return result;
-        }
-
-        @Override
-        public String getId() {
-            return getClass().getName() + Math.round(radius);
-        }
     }
 
 }

@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="NetworkImageView">
         <attr name="imageUrl" format="string" />
-        <attr name="hasRoundCorner" format="boolean" />
+        <attr name="isCircle" format="boolean" />
         <attr name="backgroudRes" format="color"/>
         <attr name="roundRadius" format="integer"/>
         <attr name="isGifEnable" format="boolean"/>

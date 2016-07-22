@@ -31,7 +31,6 @@
                 android:layout_height="150dp"
                 android:onClick="@{clickHandlers.onClick}"
                 app:imageUrl="@{shot.normImage}"
-                app:roundRadius="10"
                 />
 
             <LinearLayout
@@ -49,7 +48,7 @@
                     android:layout_height="24dp"
                     android:onClick="@{clickHandlers.onClick}"
                     app:imageUrl="@{shot.user.avatar_url}"
-                    app:roundRadius="10"/>
+                    app:isCircle="true"/>
 
                 <TextView
                     android:layout_width="wrap_content"
