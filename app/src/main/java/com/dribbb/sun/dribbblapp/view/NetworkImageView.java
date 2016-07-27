@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dribbb.sun.dribbblapp.R;
 import com.dribbb.sun.dribbblapp.instance.GlideInstance;
 import com.dribbb.sun.dribbblapp.utils.VariableUtils;
@@ -63,7 +64,7 @@ public class NetworkImageView extends ImageView {
         }else if(isCircle){
             glideRequest.transform(new GlideInstance.CircleTransform(mContext));
         }else{
-            glideRequest.centerCrop();
+            glideRequest.centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL);
         }
         glideRequest.into(this);
     }

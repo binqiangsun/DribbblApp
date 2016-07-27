@@ -31,7 +31,7 @@
                 android:layout_height="150dp"
                 android:onClick="@{clickHandlers.onClick}"
                 app:imageUrl="@{shot.normImage}"
-                android:transitionName="transition_image"
+                android:transitionName="@string/tran_image"
                 />
 
             <LinearLayout
@@ -97,7 +97,7 @@
                     android:textSize="12sp"/>
 
             </LinearLayout>
-
+            
         </LinearLayout>
 
 

@@ -1,5 +1,7 @@
 package com.dribbb.sun.dribbblapp.viewholder;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -44,6 +46,13 @@ public class SelectedViewHolder extends BaseViewHolder implements View.OnClickLi
         Intent intent = new Intent(mContext, ShotInfoNativeActivity.class);
         intent.putExtra("shot", mShot);
         intent.putExtra("shotId", String.valueOf(mShot.getId()));
-        mContext.startActivity(intent);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(
+                    (Activity) mContext, binding.imageDraweeView, mContext.getString(R.string.tran_image));
+            mContext.startActivity(intent, transitionActivityOptions.toBundle());
+        }else {
+            mContext.startActivity(intent);
+        }
     }
 }
