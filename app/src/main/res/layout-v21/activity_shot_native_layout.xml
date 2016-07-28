@@ -41,6 +41,7 @@
                     app:layout_collapseParallaxMultiplier="0.7"
                     app:lowImageUrl="@{shot.normImage}"
                     app:imageUrl="@{shot.hdipImage}"
+                    app:isProgress="true"
                     app:isGifEnable="true"/>
             </android.support.design.widget.CollapsingToolbarLayout>
 

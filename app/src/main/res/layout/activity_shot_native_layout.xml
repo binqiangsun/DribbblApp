@@ -41,7 +41,7 @@
                     app:layout_collapseParallaxMultiplier="0.7"
                     app:imageUrl="@{shot.hdipImage}"
                     app:lowImageUrl="@{shot.normImage}"
-                    android:transitionName="transition_image"
+                    app:isProgress="true"
                     app:isGifEnable="true"/>
             </android.support.design.widget.CollapsingToolbarLayout>
 

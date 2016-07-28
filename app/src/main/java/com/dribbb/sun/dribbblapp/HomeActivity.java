@@ -1,6 +1,7 @@
 package com.dribbb.sun.dribbblapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,13 +14,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ViewFlipper;
 
-import com.dribbb.sun.dribbblapp.activity.LoginActivity;
+import com.dribbb.sun.dribbblapp.activity.WebActivity;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.databinding.ActivityHomeBinding;
 import com.dribbb.sun.dribbblapp.fragment.SelectedFragment;
@@ -47,6 +49,10 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
 
     @Override
     protected void initViews() {
+        Uri uri = getIntent().getData();
+        if(uri != null) {
+            Log.d("home", "initViews: " + uri.toString());
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -72,7 +78,8 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         navigationView.getHeaderView(0).findViewById(R.id.author_iv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                Intent intent = new Intent(HomeActivity.this, WebActivity.class);
+                intent.putExtra("url", "https://dribbble.com/oauth/authorize");
                 startActivity(intent);
             }
         });

@@ -26,6 +26,10 @@
             android:theme="@style/DribbblTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="home"
+                    android:scheme="dribbble" />
             </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -78,6 +82,17 @@
                 android:value=".HomeActivity" />
         </activity>
 
+        <activity android:name=".activity.WebActivity"
+            android:label="web"
+            android:launchMode="singleTask"
+            android:theme="@style/DribbblTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".HomeActivity" />
+        </activity>
 
     </application>
 

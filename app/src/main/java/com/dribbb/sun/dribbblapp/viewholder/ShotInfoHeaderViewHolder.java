@@ -36,5 +36,6 @@ public class ShotInfoHeaderViewHolder extends BaseViewHolder {
             binding.shotTextTv.setText(Html.fromHtml(mShot.getDescription()));
         }
         FrescoManager.getInstance().setCircleImageSrc(binding.authorDraweeView, mShot.getUser().getAvatar_url(), 0, 0, R.color.gray_image_background);
+        binding.executePendingBindings();
     }
 }

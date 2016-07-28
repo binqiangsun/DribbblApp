@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import com.dribbb.sun.dribbblapp.R;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
+import com.facebook.drawee.drawable.ProgressBarDrawable;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -27,6 +28,7 @@ public class NetworkDraweeView extends SimpleDraweeView {
     private boolean isGifEnable;
     private int roundRadius ;
     private boolean isCircle;
+    private boolean isProgress;
     private String lowImageUrl = null;
 
     public NetworkDraweeView(Context context) {
@@ -45,21 +47,19 @@ public class NetworkDraweeView extends SimpleDraweeView {
         roundRadius = a.getInteger(R.styleable.NetworkDraweeView_roundRadius, 0);
         isCircle = a.getBoolean(R.styleable.NetworkDraweeView_isCircle, false);
         lowImageUrl = a.getString(R.styleable.NetworkDraweeView_lowImageUrl);
+        isProgress = a.getBoolean(R.styleable.NetworkDraweeView_isProgress, false);
     }
 
     public void setImageUrl(String imageUrl) {
         ImageRequestBuilder requestBuilder = ImageRequestBuilder.newBuilderWithSource(Uri.parse(imageUrl));
 
         PipelineDraweeControllerBuilder controllerBuilder =  Fresco.newDraweeControllerBuilder();
+        GenericDraweeHierarchyBuilder hierarchyBuilder = new GenericDraweeHierarchyBuilder(this.getResources());
         controllerBuilder.setImageRequest(requestBuilder.build());
         if(isCircle){
-            this.setHierarchy(new GenericDraweeHierarchyBuilder(this.getResources())
-                    .setRoundingParams(RoundingParams.asCircle()).build());
+            hierarchyBuilder.setRoundingParams(RoundingParams.asCircle());
         } else if(roundRadius > 0){
-            this.setHierarchy(
-                    new GenericDraweeHierarchyBuilder(this.getResources())
-                            .setRoundingParams(RoundingParams.fromCornersRadius(radius))
-                            .build());
+            hierarchyBuilder.setRoundingParams(RoundingParams.fromCornersRadius(radius));
         }
         if(isGifEnable){
             controllerBuilder.setAutoPlayAnimations(true);
@@ -67,7 +67,11 @@ public class NetworkDraweeView extends SimpleDraweeView {
         if(!TextUtils.isEmpty(lowImageUrl)){
             controllerBuilder.setLowResImageRequest(ImageRequest.fromUri(Uri.parse(lowImageUrl)));
         }
+        if(isProgress){
+            hierarchyBuilder.setProgressBarImage(new ProgressBarDrawable());
+        }
 
+        this.setHierarchy(hierarchyBuilder.build());
         this.setController(controllerBuilder.setOldController(this.getController())
                 .build());
 
