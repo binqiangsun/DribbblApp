@@ -35,6 +35,7 @@ public class ShotInfoReactActivity extends AppCompatActivity implements DefaultH
                 .addPackage(new MainReactPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
+                //.setUseOldBridge(true)
                 .build();
         Bundle bundle = new Bundle();
         bundle.putString("shotId", intent.getStringExtra("shotId"));
@@ -53,7 +54,8 @@ public class ShotInfoReactActivity extends AppCompatActivity implements DefaultH
         super.onPause();
 
         if (mReactInstanceManager != null) {
-            mReactInstanceManager.onPause();
+            //mReactInstanceManager.onPause();
+            mReactInstanceManager.onHostPause();
         }
     }
 
@@ -62,7 +64,8 @@ public class ShotInfoReactActivity extends AppCompatActivity implements DefaultH
         super.onResume();
 
         if (mReactInstanceManager != null) {
-            mReactInstanceManager.onResume(this, this);
+            //mReactInstanceManager.onResume(this, this);
+            mReactInstanceManager.onHostResume(this, this);
         }
     }
 

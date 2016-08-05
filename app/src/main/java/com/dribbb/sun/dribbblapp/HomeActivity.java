@@ -42,6 +42,16 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         super.onCreate(savedInstanceState);
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Uri uri = intent.getData();
+        if(uri != null) {
+            Log.d("home", "initViews: " + uri.toString());
+        }
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_home;
