@@ -29,7 +29,7 @@ public class WebActivity extends BaseActivity<WebLayoutBinding> {
         if(url.contains("auth")){
             Uri uri = Uri.parse(url);
             url = uri.buildUpon().appendQueryParameter("client_id", "4bb696924129982493144fe6c11560052410112e681aa8c931226a437965521d")
-                    .appendQueryParameter("redirect_uri", "drib://home")
+                    .appendQueryParameter("redirect_uri", "drib://user")
                     .appendQueryParameter("scope", "public")
                     .appendQueryParameter("state", "dribbblelogin")
                     .build().toString();
@@ -40,12 +40,13 @@ public class WebActivity extends BaseActivity<WebLayoutBinding> {
         mBinding.web.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if(url.toLowerCase().contains("drib")){
+                if(url.toLowerCase().startsWith("drib://")){
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     WebActivity.this.startActivity(intent);
                     WebActivity.this.finish();
                     return false;
                 }else {
+                    view.loadUrl(url);
                     return super.shouldOverrideUrlLoading(view, url);
                 }
             }

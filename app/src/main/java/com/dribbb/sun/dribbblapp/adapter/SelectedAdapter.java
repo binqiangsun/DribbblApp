@@ -4,20 +4,28 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import com.dribbb.sun.core.service.ServiceFactory;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.viewholder.SelectedViewHolder;
 import com.dribbb.sun.model.Shot;
+import com.dribbb.sun.service.retrofit.DribService;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import rx.Observable;
+
 /**
  * Created by sunbinqiang on 4/10/16.
  */
-public class SelectedAdapter extends ListRecyclerViewAdapter<Shot>{
+public class SelectedAdapter extends ListRecyclerShotViewAdapter{
 
     private Context mContext;
     private String  mRequestUrl;
+    private Map<String, String> mQueryMap;
     public SelectedAdapter(Context context, String requestUrl){
         mContext = context;
         mRequestUrl = requestUrl;
@@ -44,4 +52,9 @@ public class SelectedAdapter extends ListRecyclerViewAdapter<Shot>{
     }
 
 
+    @Override
+    Observable<Shot[]> getObservable() {
+        return ServiceFactory.createRetrofitService(
+                DribService.ShotService.class).getShots(String.valueOf(mPage), new HashMap<String, String>());
+    }
 }

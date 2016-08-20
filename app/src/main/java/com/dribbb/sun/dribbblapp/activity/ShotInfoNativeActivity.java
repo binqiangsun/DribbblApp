@@ -4,8 +4,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import com.dribbb.sun.core.service.ServiceFactory;
 import com.dribbb.sun.dribbblapp.R;
-import com.dribbb.sun.dribbblapp.adapter.ListRecyclerViewAdapter;
+import com.dribbb.sun.dribbblapp.adapter.ListRecyclerCommentViewAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.databinding.ActivityShotNativeLayoutBinding;
@@ -14,9 +15,12 @@ import com.dribbb.sun.dribbblapp.viewholder.ShotInfoHeaderViewHolder;
 import com.dribbb.sun.model.Comment;
 import com.dribbb.sun.model.Shot;
 import com.dribbb.sun.service.api.ApiService;
+import com.dribbb.sun.service.retrofit.DribService;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+
+import rx.Observable;
 
 /**
  * Created by sunbinqiang on 6/14/16.
@@ -42,7 +46,8 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
 
 
 
-    private class ShotInfoAdapter extends ListRecyclerViewAdapter<Comment>{
+    private class ShotInfoAdapter extends ListRecyclerCommentViewAdapter{
+
 
         @Override
         protected String getRequestUrl() {
@@ -77,6 +82,13 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
         @Override
         protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
             ((ShotInfoHeaderViewHolder)holder).setShot(mShot);
+        }
+
+
+        @Override
+        protected Observable<Comment[]> getObservable() {
+            return ServiceFactory.createRetrofitService(
+                    DribService.CommentService.class).getComments(mShot.getId(), String.valueOf(mPage));
         }
     }
 

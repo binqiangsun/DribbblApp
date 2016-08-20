@@ -1,6 +1,5 @@
 package com.dribbb.sun.dribbblapp.adapter;
 
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,21 +10,15 @@ import android.view.ViewGroup;
 import com.dribbb.sun.dribbblapp.base.BaseRecyclerViewAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.utils.TypeUtils;
-import com.dribbb.sun.service.api.ApiService;
-import com.dribbb.sun.service.http.ApiRequestHandler;
-import com.dribbb.sun.service.http.HttpService;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by sunbinqiang on 16/2/3.
@@ -37,9 +30,9 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
     private boolean mIsEnd = false;
     private boolean mIsError = false;
     private List<T> list = new ArrayList<>();
-    private Request request;
+    protected Request request;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private int mPage = 1;
+    protected int mPage = 1;
 
     public ListRecyclerViewAdapter() {
         super();
@@ -120,48 +113,7 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
         throw  new RuntimeException("unknown item view type for position:"+position);
     }
 
-    private boolean loadNext(){
-
-        if(request != null){
-            return false;
-        }
-
-        String url = Uri.parse(getRequestUrl()).buildUpon()
-                .appendQueryParameter("page", String.valueOf(mPage)).build().toString();
-        request = new Request.Builder().url(url)
-                .method(ApiService.GET_METHOD, null).build();
-
-        HttpService.exec(request, new ApiRequestHandler() {
-            @Override
-            public void onRequestFinish(Request req, Response resp) throws IOException {
-                super.onRequestFinish(req, resp);
-                releaseRequest();
-                JSONArray data = null;
-                try {
-                    data = new JSONArray(new String(resp.body().bytes()));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if(data != null) {
-                    T[] resultList = getResult(gson, data);
-                    if (resultList.length == 0){
-                        mIsEnd = true;
-                    }
-                    setResultList(resultList);
-                }
-                onRequestFinished();
-                mPage ++;
-            }
-
-            @Override
-            public void onRequestFailed(Request req, Response resp) {
-                super.onRequestFailed(req, resp);
-                releaseRequest();
-                onRequestFinished();
-            }
-        });
-        return true;
-    }
+    abstract boolean loadNext();
 
     private void releaseRequest(){
         request = null;
@@ -193,6 +145,7 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
                 notifyDataSetChanged();
             }
         });
+        mPage ++;
     }
 
     public void reset(boolean isClear){
@@ -279,5 +232,20 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
             throw new RuntimeException("postion = " + position + ":HeaderViewHolder can't be null");
         }
         return viewHolder;
+    }
+
+    //请求成功
+    void requestSuccess(T[] resultList){
+        if (resultList.length == 0){
+            mIsEnd = true;
+        }
+        setResultList(resultList);
+        onRequestFinished();
+    }
+
+    //请求失败
+    void requestFailed(){
+        releaseRequest();
+        onRequestFinished();
     }
 }

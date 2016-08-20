@@ -3,6 +3,8 @@ package com.dribbb.sun.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+
 /**
  * Created by sunbinqiang on 16/2/2.
  */
@@ -264,5 +266,10 @@ public class User implements Parcelable {
         public String getTwitter() {
             return twitter;
         }
+    }
+
+    public String toJsonString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
