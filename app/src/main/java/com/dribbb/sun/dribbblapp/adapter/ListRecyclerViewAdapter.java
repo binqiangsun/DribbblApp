@@ -177,8 +177,6 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
         return mIsEnd && (list.size() == 0);
     }
 
-    protected abstract String getRequestUrl();
-
     protected abstract T[] getResult(Gson gson, JSONArray object);
 
     public List<T> getList() {

@@ -3,6 +3,7 @@ package com.dribbb.sun.service.retrofit;
 import com.dribbb.sun.model.Comment;
 import com.dribbb.sun.model.Shot;
 import com.dribbb.sun.model.Token;
+import com.dribbb.sun.model.User;
 
 import java.util.Map;
 
@@ -42,6 +43,11 @@ public class DribService {
         @GET("shots/{id}/comments")
         Observable<Comment[]> getComments(@Path("id") int id,
                                           @Query("page") String page);
+    }
+
+    public interface UserInfoService{
+        @GET("user")
+        Observable<User> getUser(@Query("access_token") String token);
     }
 
 

@@ -8,8 +8,6 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -22,10 +20,11 @@ import android.widget.ImageView;
 import android.widget.ViewFlipper;
 
 import com.dribbb.sun.dribbblapp.activity.WebActivity;
+import com.dribbb.sun.dribbblapp.adapter.ViewPageAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.databinding.ActivityHomeBinding;
 import com.dribbb.sun.dribbblapp.fragment.SelectedFragment;
-import com.dribbb.sun.service.api.ApiService;
+import com.dribbb.sun.service.ServiceConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,14 +158,14 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
 
     private void setTabViewPager(TabLayout tabLayout, ViewPager viewPager){
 
-        HomePageAdapter  homePageAdapter = new HomePageAdapter(getSupportFragmentManager());
+        ViewPageAdapter homePageAdapter = new ViewPageAdapter(getSupportFragmentManager());
 
         List<Fragment> fragmentList = new ArrayList<>();
 
-        fragmentList.add(SelectedFragment.newInstance(ApiService.POPULAR_SHOTS_URL));
-        fragmentList.add(SelectedFragment.newInstance(ApiService.RECENT_SHOTS_URL));
-        fragmentList.add(SelectedFragment.newInstance(ApiService.DEBUT_SHOTS_URL));
-        fragmentList.add(SelectedFragment.newInstance(ApiService.ANIMATED_SHOTS_URL));
+        fragmentList.add(SelectedFragment.newInstance("", ""));
+        fragmentList.add(SelectedFragment.newInstance(ServiceConfig.KEY_RECENT, ServiceConfig.PARAM_RECENT));
+        fragmentList.add(SelectedFragment.newInstance(ServiceConfig.KEY_LIST, ServiceConfig.PARAM_DEBUT));
+        fragmentList.add(SelectedFragment.newInstance(ServiceConfig.KEY_LIST, ServiceConfig.PARAM_ANIMATED));
         homePageAdapter.setFragments(fragmentList);
 
         List<String> titles = new ArrayList<>();
@@ -185,39 +184,5 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         ImageView image = new ImageView(getApplicationContext());
         image.setBackgroundResource(res);
         viewFlipper.addView(image);
-    }
-
-    private class HomePageAdapter extends FragmentPagerAdapter{
-
-        List<Fragment> fragments;
-        List<String> titles;
-
-
-        public HomePageAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public void setFragments(List<Fragment> fragments) {
-            this.fragments = fragments;
-        }
-
-        public void setTitles(List<String> titles) {
-            this.titles = titles;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments == null ? null : fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments == null ? 0 : fragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles.get(position);
-        }
     }
 }

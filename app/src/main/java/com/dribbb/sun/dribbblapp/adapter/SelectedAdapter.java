@@ -2,6 +2,7 @@ package com.dribbb.sun.dribbblapp.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.dribbb.sun.core.service.ServiceFactory;
@@ -25,15 +26,18 @@ public class SelectedAdapter extends ListRecyclerShotViewAdapter{
 
     private Context mContext;
     private String  mRequestUrl;
-    private Map<String, String> mQueryMap;
-    public SelectedAdapter(Context context, String requestUrl){
+    private Observable<Shot[]> mObservable;
+    private Map<String, String> mQueryMap = new HashMap<>();
+    public SelectedAdapter(Context context, String key, String param){
         mContext = context;
-        mRequestUrl = requestUrl;
+        if(!TextUtils.isEmpty(key)) {
+            mQueryMap.put(key, param);
+        }
     }
 
-    @Override
-    protected String getRequestUrl() {
-        return mRequestUrl;
+    public SelectedAdapter(Context context, Observable<Shot[]> observable){
+        mContext = context;
+        mObservable = observable;
     }
 
     @Override
@@ -54,7 +58,10 @@ public class SelectedAdapter extends ListRecyclerShotViewAdapter{
 
     @Override
     Observable<Shot[]> getObservable() {
+        if(mObservable != null){
+            return mObservable;
+        }
         return ServiceFactory.createRetrofitService(
-                DribService.ShotService.class).getShots(String.valueOf(mPage), new HashMap<String, String>());
+                DribService.ShotService.class).getShots(String.valueOf(mPage), mQueryMap);
     }
 }

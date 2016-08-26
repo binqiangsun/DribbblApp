@@ -55,6 +55,17 @@ public class ServiceFactory {
         return retrofit.create(clazz);
     }
 
+    public static <T> T createRetrofitServiceNoHead(final Class<T> clazz) {
+
+        String GET_API_URL = "https://api.dribbble.com/v1/";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(GET_API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        return retrofit.create(clazz);
+    }
+
     public static <T> T createPostRetrofitService(final Class<T> clazz) {
 
         String TOKEN_URL = "https://dribbble.com/";

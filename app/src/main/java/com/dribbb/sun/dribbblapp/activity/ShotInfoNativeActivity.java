@@ -14,7 +14,6 @@ import com.dribbb.sun.dribbblapp.viewholder.CommentViewholder;
 import com.dribbb.sun.dribbblapp.viewholder.ShotInfoHeaderViewHolder;
 import com.dribbb.sun.model.Comment;
 import com.dribbb.sun.model.Shot;
-import com.dribbb.sun.service.api.ApiService;
 import com.dribbb.sun.service.retrofit.DribService;
 import com.google.gson.Gson;
 
@@ -47,12 +46,6 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
 
 
     private class ShotInfoAdapter extends ListRecyclerCommentViewAdapter{
-
-
-        @Override
-        protected String getRequestUrl() {
-            return ApiService.API_SERVICE+"/shots/" + mShot.getId() + "/comments";
-        }
 
         @Override
         protected Comment[] getResult(Gson gson, JSONArray object) {

@@ -20,10 +20,11 @@ import com.dribbb.sun.dribbblapp.base.BaseFragment;
 public class SelectedFragment extends BaseFragment {
 
     //实例化, 传递参数
-    public static SelectedFragment newInstance(String requestUrl){
+    public static SelectedFragment newInstance(String key, String param){
         SelectedFragment selectedFragment = new SelectedFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("request_url", requestUrl);
+        bundle.putString("key", key);
+        bundle.putString("param", param);
         selectedFragment.setArguments(bundle);
         return selectedFragment;
     }
@@ -53,7 +54,7 @@ public class SelectedFragment extends BaseFragment {
                         4);
             }
         });
-        final SelectedAdapter adapter = new SelectedAdapter(getContext(), getArguments().getString("request_url"));
+        final SelectedAdapter adapter = new SelectedAdapter(getContext(), getArguments().getString("key"), getArguments().getString("param"));
         adapter.setSwipeRefreshLayout(swipeRefreshLayout);
         recyclerView.setAdapter(adapter);
 
