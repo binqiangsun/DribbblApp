@@ -10,21 +10,20 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import com.dribbb.sun.dribbblapp.R;
-import com.dribbb.sun.dribbblapp.adapter.SelectedShotAdapter;
+import com.dribbb.sun.dribbblapp.adapter.UserShotAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseFragment;
 
 /**
  * Created by sunbinqiang on 16/2/27.
  * 首页精选
  */
-public class SelectedFragment extends BaseFragment {
+public class UserShotFragment extends BaseFragment {
 
     //实例化, 传递参数
-    public static SelectedFragment newInstance(String key, String param){
-        SelectedFragment selectedFragment = new SelectedFragment();
+    public static UserShotFragment newInstance(int type){
+        UserShotFragment selectedFragment = new UserShotFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("key", key);
-        bundle.putString("param", param);
+        bundle.putInt("type", type);
         selectedFragment.setArguments(bundle);
         return selectedFragment;
     }
@@ -54,7 +53,7 @@ public class SelectedFragment extends BaseFragment {
                         4);
             }
         });
-        final SelectedShotAdapter adapter = new SelectedShotAdapter(getContext(), getArguments().getString("key"), getArguments().getString("param"));
+        final UserShotAdapter adapter = new UserShotAdapter(getContext(), getArguments().getInt("type"));
         adapter.setSwipeRefreshLayout(swipeRefreshLayout);
         recyclerView.setAdapter(adapter);
 

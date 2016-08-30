@@ -2,11 +2,11 @@ package com.dribbb.sun.dribbblapp.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.dribbb.sun.core.service.ServiceFactory;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
+import com.dribbb.sun.dribbblapp.utils.TypeUtils;
 import com.dribbb.sun.dribbblapp.viewholder.SelectedViewHolder;
 import com.dribbb.sun.model.Shot;
 import com.dribbb.sun.service.retrofit.DribService;
@@ -22,22 +22,16 @@ import rx.Observable;
 /**
  * Created by sunbinqiang on 4/10/16.
  */
-public class SelectedAdapter extends ListRecyclerShotViewAdapter{
+public class UserShotAdapter extends ListRecyclerShotViewAdapter{
 
     private Context mContext;
-    private String  mRequestUrl;
-    private Observable<Shot[]> mObservable;
+    private int mType;
+    private int mUserId;
     private Map<String, String> mQueryMap = new HashMap<>();
-    public SelectedAdapter(Context context, String key, String param){
+    public UserShotAdapter(Context context, int type, int userId){
         mContext = context;
-        if(!TextUtils.isEmpty(key)) {
-            mQueryMap.put(key, param);
-        }
-    }
-
-    public SelectedAdapter(Context context, Observable<Shot[]> observable){
-        mContext = context;
-        mObservable = observable;
+        mType = type;
+        mUserId = userId;
     }
 
     @Override
@@ -58,10 +52,14 @@ public class SelectedAdapter extends ListRecyclerShotViewAdapter{
 
     @Override
     Observable<Shot[]> getObservable() {
-        if(mObservable != null){
-            return mObservable;
+        switch (mType){
+            case TypeUtils.SHOT_BUCKETS:
+                return ServiceFactory.createRetrofitService(
+                        DribService.UserShotService.class).getBuckets(mUserId, String.valueOf(mPage));
+            case TypeUtils.SHOT_LIKES:
+                return ServiceFactory.createRetrofitService(
+                        DribService.UserShotService.class).getLikes(mUserId, String.valueOf(mPage));
         }
-        return ServiceFactory.createRetrofitService(
-                DribService.ShotService.class).getShots(String.valueOf(mPage), mQueryMap);
+        return null;
     }
 }

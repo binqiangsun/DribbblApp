@@ -11,4 +11,12 @@ public class TypeUtils {
     public static final int EMPTY_ID = -2;
     public static final int LOADING_ID = -3;
     public static final int ITEM_ID = 0;
+
+    /**
+     * 个人主页shot流的类型
+     */
+    public static final int SHOT_LIKES = 0;
+    public static final int SHOT_BUCKETS = 1;
+    public static final int SHOT_SHOTS = 2;
+
 }

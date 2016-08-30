@@ -33,10 +33,19 @@ public class DribService {
                                   @Query("code") String code);
     }
 
-    public interface ShotService{
+    public interface SelectedShotService {
         @GET("shots")
         Observable<Shot[]> getShots(@Query("page") String page,
                                     @QueryMap Map<String, String> queryMap);
+    }
+
+    public interface UserShotService{
+        @GET("users/{id}/likes")
+        Observable<Shot[]> getLikes(@Path("id") int id,
+                                    @Query("page") String page);
+        @GET("users/{id}/buckets")
+        Observable<Shot[]> getBuckets(@Path("id") int id,
+                                    @Query("page") String page);
     }
 
     public interface CommentService{
