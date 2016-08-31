@@ -1,24 +1,21 @@
 package com.dribbb.sun.dribbblapp.activity;
 
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
 import com.dribbb.sun.core.service.ServiceFactory;
-import com.dribbb.sun.dribbblapp.HomeActivity;
 import com.dribbb.sun.dribbblapp.MainApplication;
 import com.dribbb.sun.dribbblapp.R;
 import com.dribbb.sun.dribbblapp.adapter.ViewPageAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.databinding.UserInfoLayoutBinding;
-import com.dribbb.sun.dribbblapp.fragment.SelectedFragment;
+import com.dribbb.sun.dribbblapp.fragment.UserShotFragment;
+import com.dribbb.sun.dribbblapp.utils.TypeUtils;
 import com.dribbb.sun.model.Token;
 import com.dribbb.sun.model.User;
-import com.dribbb.sun.service.ServiceConfig;
 import com.dribbb.sun.service.retrofit.DribService;
 
 import java.util.ArrayList;
@@ -32,17 +29,7 @@ import rx.Subscriber;
 
 public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
     private static final int MSG_VIEW_ID = 1;
-
-    private Handler mHandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message message) {
-            switch (message.what){
-                case MSG_VIEW_ID:
-                    updateView();
-            }
-            return false;
-        }
-    });
+    private User mUser;
 
     @Override
     protected int getLayoutId() {
@@ -76,6 +63,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
             @Override
             public void onNext(Token response) {
                 MainApplication.instance().accountService().updateToken(response.getAccess_token());
+                getUserInfo();
             }
         });
     }
@@ -97,12 +85,14 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
                     @Override
                     public void onNext(User user) {
                         MainApplication.instance().accountService().updateUser(user);
+                        updateView(user);
                     }
                 });
     }
 
     private void updateView(User user){
-
+        mUser = user;
+        setTabViewPager(mBinding.userTabs, mBinding.userViewPager);
     }
 
     private void setTabViewPager(TabLayout tabLayout, ViewPager viewPager){
@@ -111,17 +101,15 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
 
         List<Fragment> fragmentList = new ArrayList<>();
 
-        fragmentList.add(SelectedFragment.newInstance("", ""));
-        fragmentList.add(SelectedFragment.newInstance(ServiceConfig.KEY_RECENT, ServiceConfig.PARAM_RECENT));
-        fragmentList.add(SelectedFragment.newInstance(ServiceConfig.KEY_LIST, ServiceConfig.PARAM_DEBUT));
-        fragmentList.add(SelectedFragment.newInstance(ServiceConfig.KEY_LIST, ServiceConfig.PARAM_ANIMATED));
+        fragmentList.add(UserShotFragment.newInstance(TypeUtils.SHOT_LIKES, mUser.getId()));
+        fragmentList.add(UserShotFragment.newInstance(TypeUtils.SHOT_BUCKETS, mUser.getId()));
+        fragmentList.add(UserShotFragment.newInstance(TypeUtils.SHOT_SHOTS, mUser.getId()));
         viewPageAdapter.setFragments(fragmentList);
 
         List<String> titles = new ArrayList<>();
-        titles.add("PROFILE");
         titles.add("LIKES");
-        titles.add("FOLLOWERS");
-        titles.add("FOLLOWINGS");
+        titles.add("BUCKETS");
+        titles.add("ALL");
         viewPageAdapter.setTitles(titles);
 
         viewPager.setAdapter(viewPageAdapter);

@@ -2,6 +2,7 @@ package com.dribbb.sun.service.retrofit;
 
 import com.dribbb.sun.model.Comment;
 import com.dribbb.sun.model.Shot;
+import com.dribbb.sun.model.ShotResult;
 import com.dribbb.sun.model.Token;
 import com.dribbb.sun.model.User;
 
@@ -41,11 +42,14 @@ public class DribService {
 
     public interface UserShotService{
         @GET("users/{id}/likes")
-        Observable<Shot[]> getLikes(@Path("id") int id,
-                                    @Query("page") String page);
+        Observable<ShotResult[]> getLikes(@Path("id") int id,
+                                          @Query("page") String page);
         @GET("users/{id}/buckets")
-        Observable<Shot[]> getBuckets(@Path("id") int id,
+        Observable<ShotResult[]> getBuckets(@Path("id") int id,
                                     @Query("page") String page);
+        @GET("users/{id}/shots")
+        Observable<ShotResult[]> getShots(@Path("id") int id,
+                                      @Query("page") String page);
     }
 
     public interface CommentService{

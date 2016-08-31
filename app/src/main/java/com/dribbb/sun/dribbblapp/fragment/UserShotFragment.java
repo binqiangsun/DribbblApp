@@ -20,10 +20,11 @@ import com.dribbb.sun.dribbblapp.base.BaseFragment;
 public class UserShotFragment extends BaseFragment {
 
     //实例化, 传递参数
-    public static UserShotFragment newInstance(int type){
+    public static UserShotFragment newInstance(int type, int userId){
         UserShotFragment selectedFragment = new UserShotFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
+        bundle.putInt("userId", userId);
         selectedFragment.setArguments(bundle);
         return selectedFragment;
     }
@@ -53,7 +54,8 @@ public class UserShotFragment extends BaseFragment {
                         4);
             }
         });
-        final UserShotAdapter adapter = new UserShotAdapter(getContext(), getArguments().getInt("type"));
+        final UserShotAdapter adapter = new UserShotAdapter(getContext(),
+                getArguments().getInt("type"), getArguments().getInt("userId"));
         adapter.setSwipeRefreshLayout(swipeRefreshLayout);
         recyclerView.setAdapter(adapter);
 

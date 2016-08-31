@@ -51,6 +51,9 @@ public class NetworkDraweeView extends SimpleDraweeView {
     }
 
     public void setImageUrl(String imageUrl) {
+        if(TextUtils.isEmpty(imageUrl)){
+            return;
+        }
         ImageRequestBuilder requestBuilder = ImageRequestBuilder.newBuilderWithSource(Uri.parse(imageUrl));
 
         PipelineDraweeControllerBuilder controllerBuilder =  Fresco.newDraweeControllerBuilder();

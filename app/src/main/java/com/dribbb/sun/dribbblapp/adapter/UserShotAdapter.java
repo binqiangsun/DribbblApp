@@ -9,25 +9,22 @@ import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.utils.TypeUtils;
 import com.dribbb.sun.dribbblapp.viewholder.SelectedViewHolder;
 import com.dribbb.sun.model.Shot;
+import com.dribbb.sun.model.ShotResult;
 import com.dribbb.sun.service.retrofit.DribService;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import rx.Observable;
 
 /**
  * Created by sunbinqiang on 4/10/16.
  */
-public class UserShotAdapter extends ListRecyclerShotViewAdapter{
+public class UserShotAdapter extends ListRecyclerShotResultViewAdapter{
 
     private Context mContext;
     private int mType;
     private int mUserId;
-    private Map<String, String> mQueryMap = new HashMap<>();
     public UserShotAdapter(Context context, int type, int userId){
         mContext = context;
         mType = type;
@@ -35,8 +32,8 @@ public class UserShotAdapter extends ListRecyclerShotViewAdapter{
     }
 
     @Override
-    protected Shot[] getResult(Gson gson, JSONArray object) {
-        return gson.fromJson(object.toString(), Shot[].class);
+    protected ShotResult[] getResult(Gson gson, JSONArray object) {
+        return gson.fromJson(object.toString(), ShotResult[].class);
     }
 
     @Override
@@ -46,12 +43,12 @@ public class UserShotAdapter extends ListRecyclerShotViewAdapter{
 
     @Override
     protected void onBindItemView(RecyclerView.ViewHolder holder, int position) {
-        ((SelectedViewHolder)holder).setShots(getList().get(position));
+        ((SelectedViewHolder)holder).setShots(getList().get(position).getShot());
     }
 
 
     @Override
-    Observable<Shot[]> getObservable() {
+    Observable<ShotResult[]> getObservable() {
         switch (mType){
             case TypeUtils.SHOT_BUCKETS:
                 return ServiceFactory.createRetrofitService(
@@ -59,7 +56,9 @@ public class UserShotAdapter extends ListRecyclerShotViewAdapter{
             case TypeUtils.SHOT_LIKES:
                 return ServiceFactory.createRetrofitService(
                         DribService.UserShotService.class).getLikes(mUserId, String.valueOf(mPage));
+            default:
+                return ServiceFactory.createRetrofitService(
+                        DribService.UserShotService.class).getShots(mUserId, String.valueOf(mPage));
         }
-        return null;
     }
 }
