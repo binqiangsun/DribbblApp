@@ -8,12 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.facebook.react.BuildConfig;
-import com.facebook.react.LifecycleState;
+import com.dribbb.sun.dribbblapp.MainApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
-import com.facebook.react.shell.MainReactPackage;
 
 /**
  * Created by sunbinqiang on 4/10/16.
@@ -28,15 +26,10 @@ public class ShotInfoReactActivity extends AppCompatActivity implements DefaultH
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         mReactRootView = new ReactRootView(this);
-        mReactInstanceManager = ReactInstanceManager.builder()
-                .setApplication(getApplication())
-                .setBundleAssetName("index.android.bundle")
-                .setJSMainModuleName("index.android")
-                .addPackage(new MainReactPackage())
-                .setUseDeveloperSupport(BuildConfig.DEBUG)
-                .setInitialLifecycleState(LifecycleState.RESUMED)
-                //.setUseOldBridge(true)
-                .build();
+        mReactInstanceManager =
+                ((MainApplication) getApplication())
+                        .getReactNativeHost()
+                        .getReactInstanceManager();
         Bundle bundle = new Bundle();
         bundle.putString("shotId", intent.getStringExtra("shotId"));
         Toast.makeText(this, intent.getStringExtra("shotId"), Toast.LENGTH_SHORT).show();
@@ -55,7 +48,7 @@ public class ShotInfoReactActivity extends AppCompatActivity implements DefaultH
 
         if (mReactInstanceManager != null) {
             //mReactInstanceManager.onPause();
-            mReactInstanceManager.onHostPause();
+            mReactInstanceManager.onHostPause(this);
         }
     }
 

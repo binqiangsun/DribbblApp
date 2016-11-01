@@ -2,8 +2,10 @@ package com.dribbb.sun.dribbblapp.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.DrawableTypeRequest;
@@ -12,6 +14,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dribbb.sun.dribbblapp.R;
 import com.dribbb.sun.dribbblapp.instance.GlideInstance;
 import com.dribbb.sun.dribbblapp.utils.VariableUtils;
+
+import java.io.File;
 
 /**
  * Created by sunbinqiang on 7/20/16.
@@ -69,9 +73,15 @@ public class NetworkImageView extends ImageView {
         glideRequest.into(this);
     }
 
-    private void setFrescoImageUrl(String imageUrl){
-        if(TextUtils.isEmpty(imageUrl)) return;
-
+    /**
+     * 加载本地图片
+     * @param uri
+     */
+    public void setImageUri(Uri uri){
+        Log.d("uri", uri.getPath());
+        Glide.with(mContext)
+                .load(new File(uri.getPath()))
+                .into(this);
     }
 
 }

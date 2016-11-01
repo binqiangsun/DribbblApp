@@ -17,32 +17,49 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/card_margin_small"
+        android:layout_marginLeft="@dimen/card_margin_medium"
         android:orientation="horizontal">
+
+        <com.dribbb.sun.dribbblapp.view.NetworkImageView
+            android:id="@+id/author_drawee_view"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:imageUrl="@{comment.user.avatar_url}"
+            android:layout_gravity="top"
+            app:backgroundImage="@color/gray_image_background"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/author_drawee_view"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:backgroundImage="@color/gray_image_background"/>
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/card_margin_medium">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="16dp"
                 android:textColor="@color/white"
-                android:textSize="13sp"
+                android:textSize="@dimen/text_medium"
                 android:maxLines="1"
-                android:text="@{Html.fromHtml(comment.body)}"/>
+                android:text="@{comment.user.username}"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_margin_small"
+                android:layout_marginRight="@dimen/card_margin_medium"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_small"
+                android:text="@{comment.body}"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/divider"/>
 
         </LinearLayout>
+
 
     </LinearLayout>
 

@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 
+import com.dribbb.sun.core.service.account.AccountService;
+import com.dribbb.sun.dribbblapp.MainApplication;
 import com.dribbb.sun.dribbblapp.R;
 
 /**
@@ -85,4 +87,8 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
             return false;
         }
     };
+
+    protected AccountService accountService(){
+        return MainApplication.instance().accountService();
+    }
 }

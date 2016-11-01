@@ -24,6 +24,12 @@ android {
         enabled = true
     }
 
+    dexOptions {
+        jumboMode true
+        incremental true
+        javaMaxHeapSize "4g"
+    }
+
 }
 
 dependencies {

@@ -1,5 +1,7 @@
 package com.dribbb.sun.dribbblapp.activity;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import com.dribbb.sun.dribbblapp.adapter.ListRecyclerCommentViewAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.databinding.ActivityShotNativeLayoutBinding;
+import com.dribbb.sun.dribbblapp.view.ScrollScaleImageView;
 import com.dribbb.sun.dribbblapp.viewholder.CommentViewholder;
 import com.dribbb.sun.dribbblapp.viewholder.ShotInfoHeaderViewHolder;
 import com.dribbb.sun.model.Comment;
@@ -27,6 +30,8 @@ import rx.Observable;
 public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayoutBinding> {
 
     private Shot mShot;
+    private ShotInfoHeaderViewHolder shotInfoHeaderViewHolder;
+    private ScrollScaleImageView imageView;
 
     @Override
     protected int getLayoutId() {
@@ -35,15 +40,32 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
 
     @Override
     protected void initViews() {
+        imageView = (ScrollScaleImageView) findViewById(R.id.shot_img);
         mShot = getIntent().getParcelableExtra("shot");
         mBinding.setShot(mShot);
-        mBinding.collapsingToolbarLayout.setTitle("");
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mBinding.recyclerView.setAdapter(new ShotInfoAdapter());
-        mBinding.executePendingBindings();
+        mBinding.recyclerView.addOnScrollListener(scrollListener);
     }
 
+    private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
 
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            final int scrollY = shotInfoHeaderViewHolder.itemView.getTop();
+            imageView.setOffset(scrollY);
+            //fab.setOffset(fabOffset + scrollY);
+        }
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            // as we animate the main image's elevation change when it 'pins' at it's min height
+            // a fling can cause the title to go over the image before the animation has a chance to
+            // run. In this case we short circuit the animation and just jump to state.
+            //imageView.setImmediatePin(newState == RecyclerView.SCROLL_STATE_SETTLING);
+        }
+    };
 
     private class ShotInfoAdapter extends ListRecyclerCommentViewAdapter{
 
@@ -69,7 +91,8 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
 
         @Override
         protected BaseViewHolder onCreateHeaderViewHolder(ViewGroup parent, int position) {
-            return new ShotInfoHeaderViewHolder(ShotInfoNativeActivity.this, parent);
+            shotInfoHeaderViewHolder = new ShotInfoHeaderViewHolder(ShotInfoNativeActivity.this, parent);
+            return shotInfoHeaderViewHolder;
         }
 
         @Override

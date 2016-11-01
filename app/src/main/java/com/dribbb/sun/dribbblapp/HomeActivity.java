@@ -17,28 +17,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.dribbb.sun.dribbblapp.activity.WebActivity;
+import com.dribbb.sun.core.service.account.AccountListener;
+import com.dribbb.sun.core.service.account.AccountService;
+import com.dribbb.sun.dribbblapp.activity.UserInfoActivity;
 import com.dribbb.sun.dribbblapp.adapter.ViewPageAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.databinding.ActivityHomeBinding;
 import com.dribbb.sun.dribbblapp.fragment.SelectedFragment;
+import com.dribbb.sun.dribbblapp.view.NetworkImageView;
+import com.dribbb.sun.model.User;
 import com.dribbb.sun.service.ServiceConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends BaseActivity<ActivityHomeBinding>
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AccountListener {
 
     private static final int gallery_image_res[] =
             {R.drawable.ic_wall_1, R.drawable.ic_wall_2, R.drawable.ic_wall_3, R.drawable.ic_wall_4};
     private ViewFlipper viewFlipper;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        accountService().addListener(this);
     }
 
 
@@ -65,7 +72,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         viewFlipper = (ViewFlipper) navigationView.getHeaderView(0).findViewById(R.id.header_view_flipper) ;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -83,13 +90,16 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
                         .setAction("Action", null).show();
             }
         });
-        //登录
+        //个人主页
         navigationView.getHeaderView(0).findViewById(R.id.author_iv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, WebActivity.class);
-                intent.putExtra("url", "https://dribbble.com/oauth/authorize");
-                startActivity(intent);
+                if(MainApplication.instance().accountService().isLogin()){
+                    Intent intent = new Intent(HomeActivity.this, UserInfoActivity.class);
+                    startActivity(intent);
+                }else {
+                    accountService().login(HomeActivity.this);
+                }
             }
         });
         //登录背景动画
@@ -184,5 +194,20 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
         ImageView image = new ImageView(getApplicationContext());
         image.setBackgroundResource(res);
         viewFlipper.addView(image);
+    }
+
+    @Override
+    public void onAccountChanged(AccountService sender) {
+        if(navigationView == null) return;
+        NetworkImageView authorIv = (NetworkImageView) navigationView.getHeaderView(0).findViewById(R.id.author_iv);
+        TextView authorNameTv = (TextView) navigationView.getHeaderView(0).findViewById(R.id.author_name);
+        if(sender.isLogin()){
+            User user = sender.user();
+            authorIv.setImageUrl(user.getAvatar_url());
+            authorNameTv.setText(user.getName());
+        }else{
+            authorIv.setImageDrawable(getResources().getDrawable(R.drawable.user_default_avatar));
+            authorNameTv.setText(R.string.clicktologin);
+        }
     }
 }

@@ -38,15 +38,20 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
 
     @Override
     protected void initViews() {
-        Uri uri = getIntent().getData();
-        String code = uri.getQueryParameter("code");
-        getUser(code);
+        if(!MainApplication.instance().accountService().isLogin()) {
+            Uri uri = getIntent().getData();
+            if(uri != null) {
+                String code = uri.getQueryParameter("code");
+                getUser(code);
+            }
+        }else{
+            updateView(MainApplication.instance().accountService().user());
+        }
     }
 
 
     public void getUser(String code){
         //
-
         ServiceFactory.toSubscribe(ServiceFactory.createPostRetrofitService(
                 DribService.UserService.class).getUser(DribService.CLIENT_ID, DribService.CLIENT_SECRET, code),
                 new Subscriber<Token>() {
@@ -63,14 +68,17 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
             @Override
             public void onNext(Token response) {
                 MainApplication.instance().accountService().updateToken(response.getAccess_token());
-                getUserInfo();
+                getUserInfo(response.getAccess_token());
             }
         });
     }
 
-    private void getUserInfo(){
+    /**
+     * 获取用户信息
+     */
+    private void getUserInfo(String token){
         ServiceFactory.toSubscribe(ServiceFactory.createRetrofitServiceNoHead(
-                DribService.UserInfoService.class).getUser(MainApplication.instance().accountService().token()),
+                DribService.UserInfoService.class).getUser(token),
                 new Subscriber<User>() {
                     @Override
                     public void onCompleted() {

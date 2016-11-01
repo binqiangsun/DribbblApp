@@ -1,11 +1,15 @@
 'use strict';
 import Dimensions from 'Dimensions'
 import {Platform} from 'react-native'
-
-import React, {
+import NetImageView from './netimageview'
+import React, {Component} from 'react';
+import {
   Text,
   View,
-  Image
+  Image,
+  AppRegistry,
+  StyleSheet,
+  ListView,
 } from 'react-native';
 
 
@@ -19,6 +23,7 @@ export default IS_ANDROID
 
 
 var REQUEST_URL = 'https://api.dribbble.com/v1/shots/';
+var REQUEST_COMMENT_URL = 'https://api.dribbble.com/v1/shots/';
 var ACCESS_TOKEN = '?access_token=acea171b23f1058c2a5de36300f708761f810513e8e083c349fc10ffabee4036';
 
 class ShotInfo extends React.Component {
@@ -28,15 +33,18 @@ class ShotInfo extends React.Component {
     this.state = {
       shot: null,
       id:props.shotId,
+      comments: new ListView.DataSource({
+                rowHasChanged: (row1, row2) => row1 !== row2,
+            }),
     };
+    this._list = [];
   }
 
   render() {
-    if(!this.state.shot) {
+    if(this._list.length == 0) {
       return this.renderLoadingView();
     }
-    var shot = this.state.shot;
-    return this.renderShot(shot)
+    return this.renderShot()
   }
 
   renderLoadingView(){
@@ -47,22 +55,43 @@ class ShotInfo extends React.Component {
       )
   }
 
-  renderShot(shot){
+  renderShot(){
+        return (
+          <View style={ styles.container }>
+            <ListView
+              dataSource={ this.state.comments }
+                    renderRow={ this.renderComment.bind(this) }
+            />
+          </View>
+        )
+  }
+
+  renderComment(comment){
+    alert(comment.body);
     return (
-      <View style={ styles.container }>
-        <Image source={{ uri: shot.images.hidpi }} style={ styles.shotImg } />
-        <Text style={ styles.shotTitle }>{ shot.title }</Text>
-        <Text style={ styles.shotText }>{shot.description}</Text>
-      </View>
+        <View>
+            <Text >{comment.body}</Text>
+        </View>
+    )
+  }
+
+  renderHead(){
+    return (
+        <View>
+            <NetImageView imageUrl={shot.images.hidpi} style={ styles.shotImg } />
+            <Text style={ styles.shotTitle }>{ shot.title }</Text>
+            <Text style={ styles.shotText }>{shot.description}</Text>
+        </View>
     )
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.fetchShot();
+    this.fetchComments();
   }
 
 
-  fetchData(){
+  fetchShot(){
     var request_url = REQUEST_URL + this.state.id + ACCESS_TOKEN;
     fetch(request_url)
     .then((response) => response.json())
@@ -73,11 +102,25 @@ class ShotInfo extends React.Component {
       })
     .done();
   }
+
+    fetchComments(){
+        var request_url = REQUEST_URL + this.state.id + "/comments" + ACCESS_TOKEN;
+        fetch(request_url)
+        .then((responseData) => {
+            this.getDataSource(responseData)
+          })
+        .done();
+    }
+
+    getDataSource(list) {
+        this._list = this._list.concat(list)
+        return this.state.comments.cloneWithRows(this._list)
+    }
 }
 
 
 
-var styles = React.StyleSheet.create({
+var styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -103,4 +146,4 @@ var styles = React.StyleSheet.create({
   },
 });
 
-React.AppRegistry.registerComponent('ShotInfo', () => ShotInfo);
+AppRegistry.registerComponent('ShotInfo', () => ShotInfo);

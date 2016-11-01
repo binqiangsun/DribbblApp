@@ -38,7 +38,7 @@ public class ServiceFactory {
                 Request.Builder builder = original.newBuilder()
                         .method(original.method(), original.body())
                         //添加请求头部
-                        .header("Authorization", "Bearer " + ServiceConfig.ACCESS_TOKEN);
+                        .header("Authorization", "Bearer " + getAccessToken());
 
                 return chain.proceed(builder.build());
             }
@@ -88,6 +88,14 @@ public class ServiceFactory {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(s);
+    }
+
+    public static String getAccessToken(){
+        if(LibApplication.instance().accountService().isLogin()){
+            return LibApplication.instance().accountService().token();
+        }else{
+            return ServiceConfig.ACCESS_TOKEN;
+        }
     }
 
 }

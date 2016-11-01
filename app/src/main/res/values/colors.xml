@@ -13,4 +13,6 @@
     <color name="dark_black">#424242</color>
     <color name="text_dark_gray">#7e7e7e</color>
     <color name="windowBackgroundColor">#f7f6f0</color>
+
+    <color name="divider">#595C63</color>
 </resources>

@@ -2,12 +2,13 @@ package com.dribbb.sun.dribbblapp.viewholder;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.text.Html;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.dribbb.sun.dribbblapp.R;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.databinding.CommentViewBinding;
-import com.dribbb.sun.dribbblapp.instance.FrescoManager;
 import com.dribbb.sun.model.Comment;
 
 /**
@@ -29,6 +30,6 @@ public class CommentViewholder extends BaseViewHolder {
     public void setComment(Comment comment){
         mComment = comment;
         binding.setComment(comment);
-        FrescoManager.getInstance().setCircleImageSrc(binding.authorDraweeView, mComment.getUser().getAvatar_url(), 0, 0, R.color.gray_image_background);
+        Log.d("comment", Html.fromHtml(comment.getBody()).toString());
     }
 }

@@ -7,4 +7,37 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- card规范  -->
+    <dimen name="card_margin_extremely_tiny">2dp</dimen>
+    <dimen name="card_margin_tiny">4dp</dimen>
+    <dimen name="card_margin_small_6">6dp</dimen>
+    <dimen name="card_margin_small">8dp</dimen>
+    <dimen name="card_margin_medium">16dp</dimen>
+    <dimen name="card_margin_20">20dp</dimen>
+    <dimen name="card_margin_24">24dp</dimen>
+    <dimen name="card_margin_large_30">30dp</dimen>
+    <dimen name="card_margin_large">32dp</dimen>
+    <dimen name="card_margin_large_40">40dp</dimen>
+    <dimen name="card_margin_very_large">48dp</dimen>
+    <dimen name="card_margin_huge">64dp</dimen>
+    <dimen name="margin_huge">53dp</dimen>
+    <dimen name="card_margin_medium_12">12dp</dimen>
+    <dimen name="card_height">32dp</dimen>
+
+    <!-- 视觉规范 字号 -->
+    <dimen name="text_hulk">40sp</dimen>
+    <dimen name="text_very_huge">32sp</dimen>
+    <dimen name="text_huge_28">28sp</dimen>
+    <dimen name="text_huge_24">24sp</dimen>
+    <dimen name="text_huge_22">24sp</dimen>
+    <dimen name="text_huge">20sp</dimen>
+    <dimen name="text_large">18sp</dimen>
+    <dimen name="text_medium_1">16sp</dimen>
+    <dimen name="text_medium">15sp</dimen>
+    <dimen name="text_medium_14">14sp</dimen>
+    <dimen name="text_small">13sp</dimen>
+    <dimen name="text_very_small">12sp</dimen>
+    <dimen name="text_very_very_small">11sp</dimen>
+    <dimen name="extremely_small">10sp</dimen>
 </resources>

@@ -2,6 +2,8 @@ package com.dribbb.sun.core.service;
 
 import android.content.Context;
 
+import com.dribbb.sun.core.service.account.AccountService;
+
 import java.util.HashMap;
 
 /**
@@ -16,7 +18,7 @@ public class ServicesManager {
     private static ServicesManager servicesManager;
 
     private ServicesManager(Context context) {
-        servicesMap.put(ACCOUNT_SERVICE,new AccountService(context));
+        servicesMap.put(ACCOUNT_SERVICE, new AccountService(context));
     }
 
     public static ServicesManager instance(Context context) {
