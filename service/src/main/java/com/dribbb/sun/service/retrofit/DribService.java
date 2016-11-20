@@ -9,6 +9,7 @@ import com.dribbb.sun.model.response.LikeResponse;
 
 import java.util.Map;
 
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -62,4 +63,8 @@ public interface DribService {
     //取消喜欢
     @DELETE("shots/{id}/like")
     Observable<LikeResponse> deleteLike(@Path("id") int id);
+
+    //评论
+    @POST("shots/{id}/comment")
+    Observable<Shot> postComment(@Path("id") int id, @Body String comment);
 }

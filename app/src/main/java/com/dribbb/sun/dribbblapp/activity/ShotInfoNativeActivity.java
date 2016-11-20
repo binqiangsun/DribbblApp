@@ -10,6 +10,7 @@ import com.dribbb.sun.dribbblapp.adapter.ListRecyclerViewAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.databinding.ActivityShotNativeLayoutBinding;
+import com.dribbb.sun.dribbblapp.view.CommentBarView;
 import com.dribbb.sun.dribbblapp.viewholder.CommentViewholder;
 import com.dribbb.sun.dribbblapp.viewholder.ShotInfoHeaderViewHolder;
 import com.dribbb.sun.model.Comment;
@@ -30,6 +31,7 @@ import rx.functions.Action1;
 public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayoutBinding> {
 
     private int mShotId;
+    private CommentAdapter mAdapter;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_shot_native_layout;
@@ -41,27 +43,39 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
         Shot shot = getIntent().getParcelableExtra("shot");
         mShotId = shot.getId();
         mBinding.setShot(shot);
+        mAdapter = new CommentAdapter(shot);
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mBinding.recyclerView.setAdapter(new CommentAdapter(shot));
-        ServiceFactory.toSubscribe(ApiFactory.getRequestService().getLike(mShotId),
-                new Action1<LikeResponse>() {
-                    @Override
-                    public void call(LikeResponse likeResponse) {
-                        mBinding.setIsLike(true);
-                        mBinding.setClickHandlers(deleteLikeListener);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mBinding.setIsLike(false);
-                        mBinding.setClickHandlers(postLikeListener);
-                    }
-                });
+        mBinding.recyclerView.setAdapter(mAdapter);
+        mBinding.commentBar.setOnCommentListener(new CommentBarView.OnCommentSuccessListener() {
+            @Override
+            public void commentSuccess() {
+                mAdapter.reset(false);
+            }
+        });
+        if(accountService().isLogin()) {
+            ServiceFactory.toSubscribe(ApiFactory.getRequestService().getLike(mShotId),
+                    new Action1<LikeResponse>() {
+                        @Override
+                        public void call(LikeResponse likeResponse) {
+                            mBinding.setIsLike(true);
+                            mBinding.setClickHandlers(deleteLikeListener);
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            mBinding.setIsLike(false);
+                            mBinding.setClickHandlers(postLikeListener);
+                        }
+                    });
+        }else{
+            mBinding.setClickHandlers(loginListener);
+        }
     }
 
     private View.OnClickListener postLikeListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            //TODO 待优化
             mBinding.setIsLike(true);
             mBinding.setClickHandlers(deleteLikeListener);
             ServiceFactory.toSubscribe(ApiFactory.getRequestService().postLike(mShotId),
@@ -86,6 +100,13 @@ public class ShotInfoNativeActivity extends BaseActivity<ActivityShotNativeLayou
 
                         }
                     });
+        }
+    };
+
+    private View.OnClickListener loginListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            showToast("Please login to send like...");
         }
     };
 

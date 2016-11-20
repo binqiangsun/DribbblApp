@@ -28,4 +28,8 @@
         <attr name="lowImageUrl" />
         <attr name="isProgress" />
     </declare-styleable>
+
+    <declare-styleable name="CommentBarView">
+        <attr name="shotId" format="integer"/>
+    </declare-styleable>
 </resources>

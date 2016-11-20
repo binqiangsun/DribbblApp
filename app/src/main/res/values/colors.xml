@@ -15,5 +15,7 @@
     <color name="windowBackgroundColor">#f7f6f0</color>
     <color name="main_clor_bg">#FB0086</color>
 
+    <color name="bg_translucent">#00000000</color>
+
     <color name="divider">#595C63</color>
 </resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="clickHandlers"
+            type="android.view.View.OnClickListener"/>
+    </data>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/card_margin_medium"
+        android:paddingRight="@dimen/card_margin_medium"
+        android:background="@color/colorPrimary">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/comment_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Reply"
+            android:padding="@dimen/card_margin_small"/>
+
+        <ImageButton
+            android:id="@+id/comment_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_comment"
+            android:background="@color/bg_translucent"
+            android:padding="@dimen/card_margin_small"
+            android:onClick="@{clickHandlers}"/>
+
+    </LinearLayout>
+</layout>
