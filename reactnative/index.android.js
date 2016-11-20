@@ -106,7 +106,9 @@ class ShotInfo extends React.Component {
     fetchComments(){
         var request_url = REQUEST_URL + this.state.id + "/comments" + ACCESS_TOKEN;
         fetch(request_url)
+        .then((response) => response.json())
         .then((responseData) => {
+            alert(responseData.length)
             this.getDataSource(responseData)
           })
         .done();

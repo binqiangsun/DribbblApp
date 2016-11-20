@@ -26,6 +26,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             app:imageUrl="@{comment.user.avatar_url}"
+            app:isCircle="true"
             android:layout_gravity="top"
             app:backgroundImage="@color/gray_image_background"/>
 
@@ -37,10 +38,10 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_medium"
+                android:textSize="@dimen/text_medium_1"
                 android:maxLines="1"
                 android:text="@{comment.user.username}"/>
 
@@ -51,12 +52,14 @@
                 android:layout_marginRight="@dimen/card_margin_medium"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_small"
-                android:text="@{comment.body}"/>
+                android:maxLines="2"
+                android:text="@{Html.fromHtml(comment.body)}"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/divider"/>
+                android:background="@color/divider"
+                android:layout_marginRight="@dimen/card_margin_medium"/>
 
         </LinearLayout>
 

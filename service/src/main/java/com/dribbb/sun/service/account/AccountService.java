@@ -1,4 +1,4 @@
-package com.dribbb.sun.core.service.account;
+package com.dribbb.sun.service.account;
 
 import android.content.Context;
 import android.content.Intent;

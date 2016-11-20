@@ -1,9 +1,7 @@
-package com.dribbb.sun.core.service;
+package com.dribbb.sun.service.config;
 
 import android.content.Context;
-
 import com.dribbb.sun.service.account.AccountService;
-
 import java.util.HashMap;
 
 /**

@@ -30,7 +30,7 @@ public class WebActivity extends BaseActivity<WebLayoutBinding> {
             Uri uri = Uri.parse(url);
             url = uri.buildUpon().appendQueryParameter("client_id", "4bb696924129982493144fe6c11560052410112e681aa8c931226a437965521d")
                     .appendQueryParameter("redirect_uri", "drib://user")
-                    .appendQueryParameter("scope", "public")
+                    .appendQueryParameter("scope", "public write comment upload")
                     .appendQueryParameter("state", "dribbblelogin")
                     .build().toString();
             Log.e("web", "url:"+url);

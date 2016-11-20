@@ -1,4 +1,4 @@
-package com.dribbb.sun.core.service.account;
+package com.dribbb.sun.service.account;
 
 /**
  * Created by sunbinqiang on 9/26/16.

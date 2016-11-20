@@ -1,7 +1,10 @@
-package com.dribbb.sun.core.service;
+package com.dribbb.sun.service.retrofit;
 
 
-import com.dribbb.sun.service.ServiceConfig;
+import android.widget.Toast;
+
+import com.dribbb.sun.service.LibApplication;
+import com.dribbb.sun.service.config.ServiceConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -17,6 +20,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class ServiceFactory {
@@ -28,8 +33,12 @@ public class ServiceFactory {
      */
     public static <T> T createRetrofitService(final Class<T> clazz) {
 
-        String GET_API_URL = "https://api.dribbble.com/v1/";
         final OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        //log
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        httpClient.addInterceptor(loggingInterceptor);
+
         httpClient.addInterceptor(new Interceptor() {
             @Override
             public Response intercept(Chain chain) throws IOException {
@@ -47,7 +56,7 @@ public class ServiceFactory {
         OkHttpClient okHttpClient = httpClient.build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(GET_API_URL)
+                .baseUrl(ServiceConfig.GET_API_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -87,7 +96,44 @@ public class ServiceFactory {
         o.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn(new Func1<Throwable, T>() {
+                    @Override
+                    public T call(Throwable throwable) {
+                        throw new HttpException(400, throwable.getMessage());
+                    }
+                })
                 .subscribe(s);
+    }
+
+    public static <T> void toSubscribe(Observable<T> o, Action1<T> action1, Action1<Throwable> errorAction) {
+        o.subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn(new Func1<Throwable, T>() {
+                    @Override
+                    public T call(Throwable throwable) {
+                        throw new HttpException(400, throwable.getMessage());
+                    }
+                })
+                .subscribe(action1, errorAction);
+    }
+
+    public static <T> void toSubscribe(Observable<T> o, Action1<T> action1) {
+        o.subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn(new Func1<Throwable, T>() {
+                    @Override
+                    public T call(Throwable throwable) {
+                        throw new HttpException(400, throwable.getMessage());
+                    }
+                })
+                .subscribe(action1, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Toast.makeText(LibApplication.instance(), throwable.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     public static String getAccessToken(){

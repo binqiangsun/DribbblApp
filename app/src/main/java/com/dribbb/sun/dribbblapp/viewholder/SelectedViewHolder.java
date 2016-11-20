@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dribbb.sun.dribbblapp.R;
-import com.dribbb.sun.dribbblapp.activity.ShotInfoReactActivity;
+import com.dribbb.sun.dribbblapp.activity.ShotInfoNativeActivity;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.databinding.SelectedRecyclerViewBinding;
 import com.dribbb.sun.model.Shot;
@@ -43,7 +43,7 @@ public class SelectedViewHolder extends BaseViewHolder implements View.OnClickLi
     }
 
     private void startInfo(){
-        Intent intent = new Intent(mContext, ShotInfoReactActivity.class);
+        Intent intent = new Intent(mContext, ShotInfoNativeActivity.class);
         intent.putExtra("shot", mShot);
         intent.putExtra("shotId", String.valueOf(mShot.getId()));
 

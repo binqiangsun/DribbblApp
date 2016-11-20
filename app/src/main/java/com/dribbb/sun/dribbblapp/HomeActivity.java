@@ -20,8 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.dribbb.sun.core.service.account.AccountListener;
-import com.dribbb.sun.core.service.account.AccountService;
 import com.dribbb.sun.dribbblapp.activity.UserInfoActivity;
 import com.dribbb.sun.dribbblapp.adapter.ViewPageAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
@@ -29,7 +27,9 @@ import com.dribbb.sun.dribbblapp.databinding.ActivityHomeBinding;
 import com.dribbb.sun.dribbblapp.fragment.SelectedFragment;
 import com.dribbb.sun.dribbblapp.view.NetworkImageView;
 import com.dribbb.sun.model.User;
-import com.dribbb.sun.service.ServiceConfig;
+import com.dribbb.sun.service.account.AccountListener;
+import com.dribbb.sun.service.account.AccountService;
+import com.dribbb.sun.service.config.ServiceConfig;
 
 import java.util.ArrayList;
 import java.util.List;

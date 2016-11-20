@@ -1,10 +1,10 @@
 package com.dribbb.sun.dribbblapp;
 
-import com.dribbb.sun.core.service.LibApplication;
 import com.dribbb.sun.core.service.ServicesManager;
-import com.dribbb.sun.core.service.account.AccountService;
 import com.dribbb.sun.dribbblapp.instance.FrescoManager;
 import com.dribbb.sun.dribbblapp.react.NativeReactPackage;
+import com.dribbb.sun.service.LibApplication;
+import com.dribbb.sun.service.account.AccountService;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
-import com.dribbb.sun.core.service.ServiceFactory;
 import com.dribbb.sun.dribbblapp.MainApplication;
 import com.dribbb.sun.dribbblapp.R;
 import com.dribbb.sun.dribbblapp.adapter.ViewPageAdapter;
@@ -16,12 +15,16 @@ import com.dribbb.sun.dribbblapp.fragment.UserShotFragment;
 import com.dribbb.sun.dribbblapp.utils.TypeUtils;
 import com.dribbb.sun.model.Token;
 import com.dribbb.sun.model.User;
-import com.dribbb.sun.service.retrofit.DribService;
+import com.dribbb.sun.service.retrofit.ApiFactory;
+import com.dribbb.sun.service.retrofit.ServiceFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscriber;
+
+import static com.dribbb.sun.service.config.ServiceConfig.CLIENT_ID;
+import static com.dribbb.sun.service.config.ServiceConfig.CLIENT_SECRET;
 
 /**
  * Created by sunbinqiang on 8/7/16.
@@ -52,8 +55,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
 
     public void getUser(String code){
         //
-        ServiceFactory.toSubscribe(ServiceFactory.createPostRetrofitService(
-                DribService.UserService.class).getUser(DribService.CLIENT_ID, DribService.CLIENT_SECRET, code),
+        ServiceFactory.toSubscribe(ApiFactory.getRequestService().getUser(CLIENT_ID, CLIENT_SECRET, code),
                 new Subscriber<Token>() {
             @Override
             public void onCompleted() {
@@ -69,6 +71,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
             public void onNext(Token response) {
                 MainApplication.instance().accountService().updateToken(response.getAccess_token());
                 getUserInfo(response.getAccess_token());
+                showToast(response.getScope());
             }
         });
     }
@@ -77,8 +80,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
      * 获取用户信息
      */
     private void getUserInfo(String token){
-        ServiceFactory.toSubscribe(ServiceFactory.createRetrofitServiceNoHead(
-                DribService.UserInfoService.class).getUser(token),
+        ServiceFactory.toSubscribe(ApiFactory.getRequestService().getUser(token),
                 new Subscriber<User>() {
                     @Override
                     public void onCompleted() {

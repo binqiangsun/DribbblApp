@@ -1,8 +1,9 @@
-package com.dribbb.sun.core.service;
+package com.dribbb.sun.service;
 
 import android.app.Application;
 
-import com.dribbb.sun.core.service.account.AccountService;
+import com.dribbb.sun.service.account.AccountService;
+import com.dribbb.sun.service.config.ServicesManager;
 
 /**
  * Created by sunbinqiang on 9/26/16.

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.dribbb.sun.dribbblapp.base.BaseRecyclerViewAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.utils.TypeUtils;
+import com.dribbb.sun.service.retrofit.ServiceFactory;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -19,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Request;
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by sunbinqiang on 16/2/3.
@@ -113,7 +116,30 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
         throw  new RuntimeException("unknown item view type for position:"+position);
     }
 
-    abstract boolean loadNext();
+    private boolean loadNext(){
+        if(request != null){
+            return false;
+        }
+        ServiceFactory.toSubscribe(getObservable(), new Subscriber<T[]>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                requestFailed();
+            }
+
+            @Override
+            public void onNext(T[] resultList) {
+                requestSuccess(resultList);
+            }
+        });
+        return true;
+    }
+
+    public abstract Observable<T[]> getObservable();
 
     private void releaseRequest(){
         request = null;

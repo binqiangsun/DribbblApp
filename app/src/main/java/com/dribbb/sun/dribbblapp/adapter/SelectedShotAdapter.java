@@ -5,11 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
-import com.dribbb.sun.core.service.ServiceFactory;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.viewholder.SelectedViewHolder;
 import com.dribbb.sun.model.Shot;
-import com.dribbb.sun.service.retrofit.DribService;
+import com.dribbb.sun.service.retrofit.ApiFactory;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -22,7 +21,7 @@ import rx.Observable;
 /**
  * Created by sunbinqiang on 4/10/16.
  */
-public class SelectedShotAdapter extends ListRecyclerShotViewAdapter{
+public class SelectedShotAdapter extends ListRecyclerViewAdapter<Shot>{
 
     private Context mContext;
     private String  mRequestUrl;
@@ -57,11 +56,10 @@ public class SelectedShotAdapter extends ListRecyclerShotViewAdapter{
 
 
     @Override
-    Observable<Shot[]> getObservable() {
+    public Observable<Shot[]> getObservable() {
         if(mObservable != null){
             return mObservable;
         }
-        return ServiceFactory.createRetrofitService(
-                DribService.SelectedShotService.class).getShots(String.valueOf(mPage), mQueryMap);
+        return ApiFactory.getRequestService().getShots(String.valueOf(mPage), mQueryMap);
     }
 }
