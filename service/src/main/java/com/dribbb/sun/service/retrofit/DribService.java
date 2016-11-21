@@ -44,7 +44,7 @@ public interface DribService {
     Observable<ShotResult[]> getBuckets(@Path("id") int id,
                                 @Query("page") String page);
     @GET("users/{id}/shots")
-    Observable<ShotResult[]> getShots(@Path("id") int id,
+    Observable<Shot[]> getShots(@Path("id") int id,
                                   @Query("page") String page);
 
 
