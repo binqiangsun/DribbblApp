@@ -29,6 +29,9 @@ public interface DribService {
                               @Query("client_secret") String clientSecret,
                               @Query("code") String code);
 
+    @GET("users/{id}")
+    Observable<User> getUser(@Path("id") int userId);
+
     @GET("shots")
     Observable<Shot[]> getShots(@Query("page") String page,
                                 @QueryMap Map<String, String> queryMap);

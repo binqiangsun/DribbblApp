@@ -35,6 +35,7 @@
                     android:id="@+id/author_drawee_view"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:onClick="@{clickHandlers}"
                     app:backgroundImage="@color/gray_image_background"/>
 
                 <TextView

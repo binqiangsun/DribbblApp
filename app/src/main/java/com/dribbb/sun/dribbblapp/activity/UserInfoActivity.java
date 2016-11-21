@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscriber;
+import rx.functions.Action1;
 
 import static com.dribbb.sun.service.config.ServiceConfig.CLIENT_ID;
 import static com.dribbb.sun.service.config.ServiceConfig.CLIENT_SECRET;
@@ -33,6 +34,7 @@ import static com.dribbb.sun.service.config.ServiceConfig.CLIENT_SECRET;
 public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
     private static final int MSG_VIEW_ID = 1;
     private User mUser;
+    private int mUserId;
 
     @Override
     protected int getLayoutId() {
@@ -41,6 +43,13 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
 
     @Override
     protected void initViews() {
+        boolean isOther = getIntent().getBooleanExtra("other", true);
+        if(isOther){
+            mUserId = getIntent().getIntExtra("userId", 0);
+            getUserInfo();
+            return;
+        }
+        //个人主页
         if(!MainApplication.instance().accountService().isLogin()) {
             Uri uri = getIntent().getData();
             if(uri != null) {
@@ -77,7 +86,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
     }
 
     /**
-     * 获取用户信息
+     * 获取用户信息 - 自己
      */
     private void getUserInfo(String token){
         ServiceFactory.toSubscribe(ApiFactory.getRequestService().getUser(token),
@@ -95,6 +104,19 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
                     @Override
                     public void onNext(User user) {
                         MainApplication.instance().accountService().updateUser(user);
+                        updateView(user);
+                    }
+                });
+    }
+
+    /**
+     * 获取用户信息 - 其他
+     */
+    private void getUserInfo(){
+        ServiceFactory.toSubscribe(ApiFactory.getRequestService().getUser(mUserId),
+                new Action1<User>() {
+                    @Override
+                    public void call(User user) {
                         updateView(user);
                     }
                 });

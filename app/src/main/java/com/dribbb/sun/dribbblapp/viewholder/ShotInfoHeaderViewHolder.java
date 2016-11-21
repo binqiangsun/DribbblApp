@@ -1,12 +1,15 @@
 package com.dribbb.sun.dribbblapp.viewholder;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.text.Html;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.dribbb.sun.dribbblapp.R;
+import com.dribbb.sun.dribbblapp.activity.UserInfoActivity;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.databinding.ShotInfoHeadViewBinding;
 import com.dribbb.sun.dribbblapp.instance.FrescoManager;
@@ -36,6 +39,15 @@ public class ShotInfoHeaderViewHolder extends BaseViewHolder {
             binding.shotTextTv.setText(Html.fromHtml(mShot.getDescription()));
         }
         FrescoManager.getInstance().setCircleImageSrc(binding.authorDraweeView, mShot.getUser().getAvatar_url(), 0, 0, R.color.gray_image_background);
+        binding.setClickHandlers(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, UserInfoActivity.class);
+                intent.putExtra("other", true);
+                intent.putExtra("userId", mShot.getUser().getId());
+                mContext.startActivity(intent);
+            }
+        });
         binding.executePendingBindings();
     }
 }
