@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.dribbb.sun.dribbblapp.base.BaseViewHolder;
 import com.dribbb.sun.dribbblapp.utils.TypeUtils;
 import com.dribbb.sun.dribbblapp.viewholder.SelectedViewHolder;
+import com.dribbb.sun.model.Shot;
 import com.dribbb.sun.model.ShotResult;
 import com.dribbb.sun.service.retrofit.ApiFactory;
 import com.google.gson.Gson;
@@ -14,11 +15,12 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by sunbinqiang on 4/10/16.
  */
-public class UserShotAdapter extends ListRecyclerViewAdapter<ShotResult>{
+public class UserShotAdapter extends ListRecyclerViewAdapter<Shot>{
 
     private Context mContext;
     private int mType;
@@ -30,8 +32,8 @@ public class UserShotAdapter extends ListRecyclerViewAdapter<ShotResult>{
     }
 
     @Override
-    protected ShotResult[] getResult(Gson gson, JSONArray object) {
-        return gson.fromJson(object.toString(), ShotResult[].class);
+    protected Shot[] getResult(Gson gson, JSONArray object) {
+        return gson.fromJson(object.toString(), Shot[].class);
     }
 
     @Override
@@ -41,17 +43,27 @@ public class UserShotAdapter extends ListRecyclerViewAdapter<ShotResult>{
 
     @Override
     protected void onBindItemView(RecyclerView.ViewHolder holder, int position) {
-        ((SelectedViewHolder)holder).setShots(getList().get(position).getShot());
+        ((SelectedViewHolder)holder).setShots(getList().get(position));
     }
 
 
     @Override
-    public Observable<ShotResult[]> getObservable() {
+    public Observable<Shot[]> getObservable() {
         switch (mType){
             case TypeUtils.SHOT_BUCKETS:
                 return ApiFactory.getRequestService().getBuckets(mUserId, String.valueOf(mPage));
             case TypeUtils.SHOT_LIKES:
-                return ApiFactory.getRequestService().getLikes(mUserId, String.valueOf(mPage));
+                return ApiFactory.getRequestService().getLikes(mUserId, String.valueOf(mPage))
+                        .map(new Func1<ShotResult[], Shot[]>() {
+                            @Override
+                            public Shot[] call(ShotResult[] shotResults) {
+                                Shot[] shots = new Shot[shotResults.length];
+                                for(int i = 0; i < shotResults.length; i ++){
+                                    shots[i] = shotResults[i].getShot();
+                                }
+                                return shots;
+                            }
+                        });
             default:
                 return ApiFactory.getRequestService().getShots(mUserId, String.valueOf(mPage));
         }
