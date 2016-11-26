@@ -40,12 +40,16 @@ public interface DribService {
     @GET("users/{id}/likes")
     Observable<ShotResult[]> getLikes(@Path("id") int id,
                                       @Query("page") String page);
-    @GET("users/{id}/buckets")
-    Observable<Shot[]> getBuckets(@Path("id") int id,
-                                @Query("page") String page);
     @GET("users/{id}/shots")
     Observable<Shot[]> getShots(@Path("id") int id,
                                   @Query("page") String page);
+    @GET("users/{id}/followers")
+    Observable<User[]> getFollowers(@Path("id") int id,
+                                    @Query("page") String page);
+    @GET("users/{id}/following")
+    Observable<User[]> getFollowings(@Path("id") int id,
+                                    @Query("page") String page);
+
 
 
     @GET("shots/{id}/comments")

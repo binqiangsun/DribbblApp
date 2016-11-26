@@ -11,6 +11,7 @@ import com.dribbb.sun.dribbblapp.R;
 import com.dribbb.sun.dribbblapp.adapter.ViewPageAdapter;
 import com.dribbb.sun.dribbblapp.base.BaseActivity;
 import com.dribbb.sun.dribbblapp.databinding.UserInfoLayoutBinding;
+import com.dribbb.sun.dribbblapp.fragment.UserListFragment;
 import com.dribbb.sun.dribbblapp.fragment.UserShotFragment;
 import com.dribbb.sun.dribbblapp.utils.TypeUtils;
 import com.dribbb.sun.model.Token;
@@ -124,6 +125,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
 
     private void updateView(User user){
         mUser = user;
+        mBinding.setUser(mUser);
         setTabViewPager(mBinding.userTabs, mBinding.userViewPager);
     }
 
@@ -133,15 +135,19 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
 
         List<Fragment> fragmentList = new ArrayList<>();
 
-        fragmentList.add(UserShotFragment.newInstance(TypeUtils.SHOT_LIKES, mUser.getId()));
-        fragmentList.add(UserShotFragment.newInstance(TypeUtils.SHOT_BUCKETS, mUser.getId()));
         fragmentList.add(UserShotFragment.newInstance(TypeUtils.SHOT_SHOTS, mUser.getId()));
+        fragmentList.add(UserShotFragment.newInstance(TypeUtils.SHOT_LIKES, mUser.getId()));
+
+        fragmentList.add(UserListFragment.newInstance(UserListFragment.TYPE_FOLLOWER, mUser.getId()));
+        fragmentList.add(UserListFragment.newInstance(UserListFragment.TYPE_FOLLOWING, mUser.getId()));
         viewPageAdapter.setFragments(fragmentList);
 
         List<String> titles = new ArrayList<>();
-        titles.add("LIKES");
-        titles.add("BUCKETS");
         titles.add("ALL");
+        titles.add("LIKES");
+        titles.add("FOLLOWERS");
+        titles.add("FOLLOWINGS");
+
         viewPageAdapter.setTitles(titles);
 
         viewPager.setAdapter(viewPageAdapter);

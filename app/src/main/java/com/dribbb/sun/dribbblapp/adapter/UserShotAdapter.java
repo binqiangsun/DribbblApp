@@ -50,8 +50,6 @@ public class UserShotAdapter extends ListRecyclerViewAdapter<Shot>{
     @Override
     public Observable<Shot[]> getObservable() {
         switch (mType){
-            case TypeUtils.SHOT_BUCKETS:
-                return ApiFactory.getRequestService().getBuckets(mUserId, String.valueOf(mPage));
             case TypeUtils.SHOT_LIKES:
                 return ApiFactory.getRequestService().getLikes(mUserId, String.valueOf(mPage))
                         .map(new Func1<ShotResult[], Shot[]>() {
