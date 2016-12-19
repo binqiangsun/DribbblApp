@@ -1,7 +1,6 @@
 package com.dribbb.sun.dribbblapp.viewholder;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.text.Html;
 import android.text.TextUtils;
@@ -42,10 +41,7 @@ public class ShotInfoHeaderViewHolder extends BaseViewHolder {
         binding.setClickHandlers(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, UserInfoActivity.class);
-                intent.putExtra("other", true);
-                intent.putExtra("userId", mShot.getUser().getId());
-                mContext.startActivity(intent);
+                UserInfoActivity.startUserInfoActivity(mContext, mShot.getUser().getId());
             }
         });
         binding.executePendingBindings();

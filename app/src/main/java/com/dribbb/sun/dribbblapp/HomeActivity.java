@@ -95,8 +95,7 @@ public class HomeActivity extends BaseActivity<ActivityHomeBinding>
             @Override
             public void onClick(View v) {
                 if(MainApplication.instance().accountService().isLogin()){
-                    Intent intent = new Intent(HomeActivity.this, UserInfoActivity.class);
-                    startActivity(intent);
+                    UserInfoActivity.startProfileActivity(HomeActivity.this);
                 }else {
                     accountService().login(HomeActivity.this);
                 }

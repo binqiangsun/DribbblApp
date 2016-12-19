@@ -32,6 +32,8 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
     private Gson gson = new Gson();
     private boolean mIsEnd = false;
     private boolean mIsError = false;
+    private String errorMsg;
+    private String emptyMsg;
     private List<T> list = new ArrayList<>();
     protected Request request;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -55,6 +57,7 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
         switch (viewType){
             case TypeUtils.EMPTY_ID:
             case TypeUtils.ERROR_ID:
+                return new BaseRecyclerViewAdapter.ErrorViewHolder(parent.getContext());
             case TypeUtils.LOADING_ID:
                 return new BaseRecyclerViewAdapter.LoadingViewHolder(parent.getContext(), parent);
             case TypeUtils.ITEM_ID:
@@ -108,10 +111,10 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
             return TypeUtils.ITEM_ID;
         } else if(isEmpty()){
             return TypeUtils.EMPTY_ID;
-        } else if(!isEnd()){
-            return TypeUtils.LOADING_ID;
-        } else if(!isError()){
+        } else if(isError()){
             return TypeUtils.ERROR_ID;
+        }else if(!isEnd()){
+            return TypeUtils.LOADING_ID;
         }
         throw  new RuntimeException("unknown item view type for position:"+position);
     }
@@ -128,7 +131,7 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
 
             @Override
             public void onError(Throwable e) {
-                requestFailed();
+                requestFailed(e.getMessage());
             }
 
             @Override
@@ -151,6 +154,16 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
         }
     }
 
+    private void setEmptyMsg(String emptyMsg) {
+        this.emptyMsg = emptyMsg;
+    }
+
+    public void setError(String errorMsg) {
+        mIsError = true;
+        this.errorMsg = errorMsg;
+        notifyDataSetChanged();
+    }
+
     protected void sortList(List<T> list, T[] newCommingArray) {
         if(newCommingArray == null) return;
         list.addAll(Arrays.asList(newCommingArray));
@@ -171,7 +184,6 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
                 notifyDataSetChanged();
             }
         });
-        mPage ++;
     }
 
     public void reset(boolean isClear){
@@ -265,10 +277,12 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Re
         }
         setResultList(resultList);
         onRequestFinished();
+        mPage++;
     }
 
     //请求失败
-    void requestFailed(){
+    void requestFailed(String errorMsg){
+        setError(errorMsg);
         releaseRequest();
         onRequestFinished();
     }

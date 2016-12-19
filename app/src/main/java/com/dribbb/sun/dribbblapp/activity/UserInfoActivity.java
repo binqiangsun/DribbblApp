@@ -1,5 +1,7 @@
 package com.dribbb.sun.dribbblapp.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -37,6 +39,20 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
     private User mUser;
     private int mUserId;
 
+    //其他人个人主页
+    public static void startUserInfoActivity(Context context, int userId){
+        Intent intent = new Intent(context, UserInfoActivity.class);
+        intent.putExtra("other", true);
+        intent.putExtra("userId", userId);
+        context.startActivity(intent);
+    }
+
+    //自己的个人主页
+    public static void startProfileActivity(Context context){
+        Intent intent = new Intent(context, UserInfoActivity.class);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.user_info_layout;
@@ -44,7 +60,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoLayoutBinding> {
 
     @Override
     protected void initViews() {
-        boolean isOther = getIntent().getBooleanExtra("other", true);
+        boolean isOther = getIntent().getBooleanExtra("other", false);
         if(isOther){
             mUserId = getIntent().getIntExtra("userId", 0);
             getUserInfo();

@@ -8,12 +8,6 @@ import com.dribbb.sun.service.config.ServiceConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -33,36 +27,16 @@ public class ServiceFactory {
      */
     public static <T> T createRetrofitService(final Class<T> clazz) {
 
-        final OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        //log
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        httpClient.addInterceptor(loggingInterceptor);
-
-        httpClient.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request original = chain.request();
-
-                Request.Builder builder = original.newBuilder()
-                        .method(original.method(), original.body())
-                        //添加请求头部
-                        .header("Authorization", "Bearer " + getAccessToken());
-
-                return chain.proceed(builder.build());
-            }
-        });
-
-        OkHttpClient okHttpClient = httpClient.build();
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ServiceConfig.GET_API_URL)
-                .client(okHttpClient)
+                .client(HttpClient.getClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         return retrofit.create(clazz);
     }
+
+
 
     public static <T> T createRetrofitServiceNoHead(final Class<T> clazz) {
 
@@ -135,6 +109,8 @@ public class ServiceFactory {
                     }
                 });
     }
+
+
 
     public static String getAccessToken(){
         if(LibApplication.instance().accountService().isLogin()){

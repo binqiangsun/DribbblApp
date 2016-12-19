@@ -18,4 +18,6 @@
     <color name="bg_translucent">#00000000</color>
 
     <color name="divider">#595C63</color>
+
+    <color name="light_gray">#979797</color>
 </resources>
